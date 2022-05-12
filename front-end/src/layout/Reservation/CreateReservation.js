@@ -1,8 +1,34 @@
 import React, { useState } from "react";
 import { uesHistory, Link } from "react-router-dom";
-import { }
-export default function CreateReservation() {
+import { formatAsTime, today } from "../../utils/date-time";
+import { formatReservationDate } from "../utils/format-reservation_date";
+import { createReservation } from "../../utils/api";
 
+export default function CreateReservation() {
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [number, setNumber] = useState(0);
+    const [partySize, setPartySize] = useState(0);
+
+    const history = useHistory();
+
+    const form = {
+        "first_name": firstName,
+        "last_name": lastName,
+        "mobile_number": number,
+        "reservation_date": today,
+        "reservation_time": formatAsTime,
+    }
+
+    const handleFirstName = (event) => setFirstName(event.target.value);
+    const handleLastName = (event) => setLastName(event.target.value);
+    const handleNumber = (event) => setNumber(event.target.value);
+    const handleParty = (event) => setPartySize(event.target.value);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        createReservation(form).then((result) => history.push("/"))
+    }
 
 
     return (
@@ -14,6 +40,7 @@ export default function CreateReservation() {
                         type="text"
                         name="first_name"
                         id="first_name"
+                        required
                         onChange={handleFirstName}
                     />
                 </label>
@@ -24,26 +51,45 @@ export default function CreateReservation() {
                         type="text"
                         name="last_name"
                         id="last_name"
+                        placeholder="Last Name"
+                        required
                         onChange={handleLastName}
                     />
                 </label>
                 <br />
                 <label>
                     Mobile number:
-                    <input name="mobile_number" />
+                    <input
+                        name="mobile_number"
+                        type="number"
+                        required
+                        onChange={handleNumber}
+                    />
                 </label>
                 <br />
                 <label>
                     Date of reservation
-                    <input name="reservation_date" />
+                    <input
+                        name="reservation_date" required
+                        type="date"
+                    />
                 </label>
                 <label>
                     Time of Reservation:
-                    <input name="reservation_time" />
+                    <input
+                        name="reservation_time"
+                        type="datetime-local"
+                        required
+                    />
                 </label>
                 <label>
                     Party Size:
-                    <input name="people" />
+                    <input
+                        name="people"
+                        type="number"
+                        required
+                        onChange={handleParty}
+                    />
                 </label>
                 <br />
                 <button

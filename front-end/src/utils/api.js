@@ -67,3 +67,25 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+/**
+  -Creates a reservation and saves it to the database.
+  -Must have a validation
+  -@param form
+    the form to save
+  -@param signal
+    optional AbortController.signal
+ * @returns {Promise<deck>}
+ *  a promise that resolves the saved deck, which will now have an `id` property.
+ */
+
+export async function createReservation(form, signal) {
+  const url = `${API_BASE_URL}/reservations/new`;
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify(form),
+    signal,
+  };
+  return await fetchJson(url, options, {});
+}
