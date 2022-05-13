@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import { Link } from "react-router-dom";
 
 /**
  * Defines the dashboard page.
@@ -28,6 +29,16 @@ function Dashboard({ date }) {
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
+      </div>
+      <div>
+        <Link to="/reservations/new">New Reservation</Link>
+      </div>
+      <div>
+        {reservations.map(reservation => (
+          <div>
+            {reservation.first_name}
+          </div>
+        ))}
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}

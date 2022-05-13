@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { uesHistory, Link } from "react-router-dom";
-import { formatAsTime, today } from "../../utils/date-time";
-import { formatReservationDate } from "../utils/format-reservation_date";
-import { createReservation } from "../../utils/api";
+import { useHistory } from "react-router-dom";
+import { formatAsTime, today } from "../utils/date-time";
+import { createReservation } from "../utils/api";
 
 export default function CreateReservation() {
     const [firstName, setFirstName] = useState("");
@@ -18,6 +17,7 @@ export default function CreateReservation() {
         "mobile_number": number,
         "reservation_date": today,
         "reservation_time": formatAsTime,
+        "party_size": partySize,
     }
 
     const handleFirstName = (event) => setFirstName(event.target.value);
@@ -40,6 +40,7 @@ export default function CreateReservation() {
                         type="text"
                         name="first_name"
                         id="first_name"
+                        placeholder="First Name"
                         required
                         onChange={handleFirstName}
                     />
@@ -70,18 +71,20 @@ export default function CreateReservation() {
                 <label>
                     Date of reservation
                     <input
-                        name="reservation_date" required
-                        type="date"
-                    />
-                </label>
-                <label>
-                    Time of Reservation:
-                    <input
-                        name="reservation_time"
-                        type="datetime-local"
+                        type="date" placeholder="YYYY-MM-DD" pattern="\d{4}-\d{2}-\d{2}"
                         required
                     />
                 </label>
+                <br />
+                <label>
+                    Time of Reservation:
+                    <input
+                        type="time" placeholder="HH:MM"
+                        pattern="[0-9]{2}:[0-9]{2}"
+                        required
+                    />
+                </label>
+                <br />
                 <label>
                     Party Size:
                     <input
