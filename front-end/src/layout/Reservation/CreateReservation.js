@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { formatAsTime, today } from "../utils/date-time";
-import { createReservation } from "../utils/api";
+import { formatAsTime, today } from "../../utils/date-time";
+import { createReservation } from "../../utils/api";
 
 export default function CreateReservation() {
     const [firstName, setFirstName] = useState("");
