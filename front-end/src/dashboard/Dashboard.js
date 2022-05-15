@@ -27,25 +27,6 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
-  async function fetchJson(url) {
-      const response = await fetch(url);
-      const payload = await response.json();
-      return payload.data;
-    }
-
-  
-  async function listReservations(params, signal) {
-    const url = new URL(`client-restaurantreservation.herokuapp.com`);
-    console.log(url)
-    Object.entries(params).forEach(([key, value]) =>
-      url.searchParams.append(key, value.toString())
-    );
-    return await fetchJson(url)
-      .then(formatReservationDate)
-      .then(formatReservationTime);
-  }
-  console.log(date)
-
   return (
     <main>
       <h1>Dashboard</h1>
