@@ -3,6 +3,7 @@ import { listReservations } from "../utils/api";
 import CustomerReservations from "../layout/Reservation/CustomerReservations";
 import useQuery from "../utils/useQuery";
 import { next, previous, today } from "../utils/date-time";
+import data from "./data";
 import ErrorAlert from "../layout/ErrorAlert";
 import { Link } from "react-router-dom";
 
@@ -18,11 +19,10 @@ function Dashboard({ date }) {
     date = dateQuery;
   }
 
-
-  const [reservations, setReservations] = useState([]);
+  const [reservations, setReservations] = useState(data);
   const [reservationsError, setReservationsError] = useState(null);
 
-  useEffect(loadDashboard, [date]);
+  /*useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -31,8 +31,7 @@ function Dashboard({ date }) {
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
-  }
-
+  }*/
 
   return (
     <main>
@@ -51,10 +50,11 @@ function Dashboard({ date }) {
       </div>
       <br />
       <div>
-        <CustomerReservations reservations={reservations} />
+        <CustomerReservations
+          reservations={reservations}
+        />
       </div>
       <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
     </main>
   );
 }

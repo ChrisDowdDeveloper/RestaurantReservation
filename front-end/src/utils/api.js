@@ -103,3 +103,14 @@ export async function createTable(form, signal) {
   };
   return await fetchJson(url, options);
 }
+
+export async function searchReservation(number, signal) {
+  const url = `${API_BASE_URL}/search/${number}`;
+  const options = {
+    method: "GET",
+    headers,
+    body: JSON.stringify({ data: number }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
