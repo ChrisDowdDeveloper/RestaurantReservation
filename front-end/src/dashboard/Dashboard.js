@@ -35,7 +35,7 @@ function Dashboard({ date }) {
 
   
   async function listReservations(params, signal) {
-    const url = new URL(`localhost:5000/reservations`);
+    const url = new URL(`client-restaurantreservation.herokuapp.com`);
     console.log(url)
     Object.entries(params).forEach(([key, value]) =>
       url.searchParams.append(key, value.toString())
