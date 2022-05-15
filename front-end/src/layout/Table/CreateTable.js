@@ -21,12 +21,10 @@ export default function CreateTable() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if(tableCapacity < 0 && tableName.length < 1) {
+        if(tableCapacity < 1) {
+            alert("Tables must be occupied by at least or more people")
+        } else {
             createTable(tableForm).then((result) => history.push("/"))
-        } else if(tableName.length <= 1) {
-            alert("Please correct the table name")
-        } else if(tableCapacity < 1){
-            alert("Please correct the table capacity")
         }
     }
 
