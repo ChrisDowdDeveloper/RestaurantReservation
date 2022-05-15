@@ -6,7 +6,7 @@ import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-date";
 
 const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "https://backend-restaurantreservation.herokuapp.com";
+  process.env.REACT_APP_API_BASE_URL //|| "https://backend-restaurantreservation.herokuapp.com";
 
 /**
  * Defines the default headers for these functions to work with `json-server`
@@ -82,14 +82,14 @@ export async function listReservations(params, signal) {
  */
 
 export async function createReservation(form, signal) {
-  const url = `${API_BASE_URL}/reservations/new`;
+  const url = `${API_BASE_URL}/`;
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify(form),
+    body: JSON.stringify({ data: form }),
     signal,
   };
-  return await fetchJson(url, options, {});
+  return await fetchJson(url, options);
 }
 
 
@@ -98,8 +98,8 @@ export async function createTable(form, signal) {
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify(form),
+    body: JSON.stringify({ data: form }),
     signal,
   };
-  return await fetchJson(url, options, {});
+  return await fetchJson(url, options);
 }

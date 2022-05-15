@@ -4,7 +4,7 @@ import CustomerReservations from "../layout/Reservation/CustomerReservations";
 import useQuery from "../utils/useQuery";
 import { next, previous, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
-import { Link } from "react-router-dom";  
+import { Link } from "react-router-dom";
 
 /**
  * Defines the dashboard page.
@@ -14,26 +14,25 @@ import { Link } from "react-router-dom";
  */
 function Dashboard({ date }) {
   const dateQuery = useQuery().get("date");
-   if(dateQuery) {
-     date = dateQuery;
-   }
+  if (dateQuery) {
+    date = dateQuery;
+  }
+
+
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-
-  console.log(date)
 
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)  
+    listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
   }
 
-  console.log("reservations and date " + reservations + date)
 
   return (
     <main>
@@ -52,7 +51,7 @@ function Dashboard({ date }) {
       </div>
       <br />
       <div>
-        <CustomerReservations reservations={reservations}/>
+        <CustomerReservations reservations={reservations} />
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}

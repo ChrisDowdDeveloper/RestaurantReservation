@@ -8,7 +8,7 @@ async function list(req, res) {
   res.json({ data })
 }
 
-await function create(req, res, next) {
+async function create(req, res, next) {
   const created = await service.create(req.body.data)
   res.status(201).json({ data: created });
 }

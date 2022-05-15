@@ -12,7 +12,7 @@ const reservationsRouter = require("./reservations/reservations.router");
 const app = express();
 
 app.use(cors({
-    origin: "https://client-restaurantreservation.herokuapp.com/",
+    origin: "*",
 }));
 app.use(express.json());
 
