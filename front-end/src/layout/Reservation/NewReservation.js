@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { formatAsTime, today } from "../../utils/date-time";
 import { createReservation } from "../../utils/api";
 
-export default function CreateReservation() {
+export default function NewReservation() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [number, setNumber] = useState(0);

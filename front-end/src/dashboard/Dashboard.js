@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
-import formatReservationDate from "../utils/format-reservation-date";
-import formatReservationTime from "../utils/format-reservation-date";
+import CustomerReservations from "../layout/Reservation/CustomerReservations";
+import useQuery from "../utils/useQuery";
 import { next, previous, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import { Link } from "react-router-dom";  
@@ -13,37 +13,46 @@ import { Link } from "react-router-dom";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  const dateQuery = useQuery().get("date");
+   if(dateQuery) {
+     date = dateQuery;
+   }
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  
+
+  console.log(date)
+
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
+    listReservations({ date }, abortController.signal)  
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
   }
 
+  console.log("reservations and date " + reservations + date)
+
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for date: {date}</h4>
       </div>
       <div>
-        <button onClick={date => previous(date)}>Previous</button>
-        <button onClick={date => today()}>Today</button>
-        <button onClick={date => next(date)}>Next</button>
+        <Link to={`/dashboard?date=${previous(date)}`}>Previous</Link>
+        <br />
+        <Link to={`/dashboard?date=${today()}`}>Today</Link>
+        <br />
+        <Link to={`/dashboard?date=${next(date)}`}>Next</Link>
+        <br />
         <Link to="/reservations/new">New Reservation</Link>
       </div>
       <br />
       <div>
-        {reservations.map(reservation => (
-          <p>{reservation.first_name}</p>
-        ))}
+        <CustomerReservations reservations={reservations}/>
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
