@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createTable } from "../../utils/api";
+import ValidateTable from "./ValidateTable";
 
 export default function CreateTable() {
     const [tableName, setTableName] = useState("");
@@ -15,17 +16,13 @@ export default function CreateTable() {
 
     const handleTable = (event) => setTableName(event.target.value);
 
-    function handleCapacity() {
-        setTableCapacity(tableCapacity + 1)
+    function handleCapacity(event) {
+        setTableCapacity(event.target.value)
     }
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (tableCapacity < 1) {
-            alert("Tables must be occupied by at least or more people")
-        } else {
-            createTable(tableForm).then((result) => history.push("/"))
-        }
+        createTable(tableForm).then((result) => history.push("/"))
     }
 
 
@@ -42,22 +39,15 @@ export default function CreateTable() {
             <input
                 name="capacity"
                 type="number"
+                required
                 onChange={handleCapacity}
             />
             <br />
-            <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => history.push("/")}
-            >
-                Cancel
-            </button>
-            <button
-                type="submit"
-                className="btn btn-primary"
-            >
-                Submit
-            </button>
-        </form>
+            <ValidateTable
+                tableCapacity={tableCapacity}
+                tableName={tableName}
+                history={history}
+            />
+        </form >
     )
 }
