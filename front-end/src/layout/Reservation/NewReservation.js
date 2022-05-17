@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { formatAsTime, previous, today } from "../../utils/date-time";
 import { createReservation } from "../../utils/api";
 import ValidateReservation from "./ValidateReservation";
 
@@ -16,8 +15,6 @@ export default function NewReservation({ date }) {
         "first_name": firstName,
         "last_name": lastName,
         "mobile_number": number,
-        "reservation_date": today(),
-        "reservation_time": formatAsTime,
         "party_size": partySize,
     }
 
@@ -69,7 +66,9 @@ export default function NewReservation({ date }) {
                         onChange={handleNumber}
                     />
                 </label>
-                <ValidateReservation date={date} />
+                <br />
+                <ValidateReservation />
+                <br />
                 <label>
                     Party Size:
                     <input
