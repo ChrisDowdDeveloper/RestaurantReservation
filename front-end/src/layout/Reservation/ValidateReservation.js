@@ -14,8 +14,8 @@ export default function ValidateReservation({ form }) {
     const handleDate = (event) => setResDate(event.target.value)
     const handleTime = (event) => setResTime(event.target.value)
 
-    //form["reservation_date"] = resDate;
-    //form["reservation_time"] = resTime;
+    form["reservation_date"] = resDate;
+    form["reservation_time"] = resTime;
 
 
     if (resDate < today()) {
@@ -144,7 +144,7 @@ export default function ValidateReservation({ form }) {
                 </button>
             </div>
         )
-    } else if (resTime > time) {
+    } else if (resTime <= time) {
         return (
             <div>
                 <label>
