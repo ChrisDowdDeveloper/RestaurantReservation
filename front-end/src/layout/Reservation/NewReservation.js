@@ -11,7 +11,7 @@ export default function NewReservation({ date }) {
 
     const history = useHistory();
 
-    const form = {
+    let form = {
         "first_name": firstName,
         "last_name": lastName,
         "mobile_number": number,
@@ -67,8 +67,6 @@ export default function NewReservation({ date }) {
                     />
                 </label>
                 <br />
-                <ValidateReservation />
-                <br />
                 <label>
                     Party Size:
                     <input
@@ -79,19 +77,7 @@ export default function NewReservation({ date }) {
                     />
                 </label>
                 <br />
-                <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => history.push("/")}
-                >
-                    Cancel
-                </button>
-                <button
-                    type="submit"
-                    className="btn btn-primary"
-                >
-                    Submit
-                </button>
+                <ValidateReservation form={form} />
             </form>
         </div>
     );

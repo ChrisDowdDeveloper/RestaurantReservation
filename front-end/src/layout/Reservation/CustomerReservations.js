@@ -11,9 +11,7 @@ export default function CustomerReservations({ reservations }) {
                     {reservation.first_name}
                     {reservation.last_name}
                     {reservation.party_size}
-                    {reservation.time}
                     {reservation.mobile_number}
-                    {reservation.status}
                     <Link to={`/reservations/${reservation_id}/seat`}>Seat</Link>
                     <Link to={`/reservations/${reservation_id}/edit`}>Edit</Link>
                 </article>

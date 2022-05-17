@@ -1,19 +1,22 @@
 import React, { useState } from "react"
-import { formatAsTime, today } from "../../utils/date-time"
-import formatReservationTime from "../../utils/format-reservation-time";
+import { useHistory } from "react-router";
+import { today } from "../../utils/date-time";
 
-export default function ValidateReservation() {
-
+export default function ValidateReservation({ form }) {
+    let timeOpen = `10:30`;
+    let timeClosed = `21:30`;
+    let currentDate = new Date();
+    let time = `${currentDate.getHours()}:${currentDate.getHours()}`
+    const history = useHistory();
     const [resDate, setResDate] = useState(today());
     const [resTime, setResTime] = useState()
 
     const handleDate = (event) => setResDate(event.target.value)
     const handleTime = (event) => setResTime(event.target.value)
 
-    let timeOpen = `10:30`
-    let timeClosed = `21:30`
+    //form["reservation_date"] = resDate;
+    //form["reservation_time"] = resTime;
 
-    console.log(resTime)
 
     if (resDate < today()) {
         return (
@@ -40,6 +43,21 @@ export default function ValidateReservation() {
                         required
                     />
                 </label>
+                <br />
+                <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => history.push("/")}
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled
+                >
+                    Submit
+                </button>
             </div>
         )
     } else if (resTime < timeOpen) {
@@ -67,6 +85,21 @@ export default function ValidateReservation() {
                     />
                 </label>
                 <label className="alert alert-danger">Reservation must be made after 10:30am</label>
+                <br />
+                <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => history.push("/")}
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled
+                >
+                    Submit
+                </button>
             </div>
         )
     } else if (resTime > timeClosed) {
@@ -94,6 +127,63 @@ export default function ValidateReservation() {
                     />
                 </label>
                 <label className="alert alert-danger">Reservation must be made before 9:30pm</label>
+                <br />
+                <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => history.push("/")}
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled
+                >
+                    Submit
+                </button>
+            </div>
+        )
+    } else if (resTime > time) {
+        return (
+            <div>
+                <label>
+                    Date of reservation
+                    <input
+                        type="date"
+                        placeholder="YYYY-MM-DD"
+                        pattern="\d{4}-\d{2}-\d{2}"
+                        onChange={handleDate}
+                        required
+                    />
+                </label>
+                <br />
+                <label>
+                    Time of Reservation:
+                    <input
+                        type="time"
+                        placeholder="HH:MM"
+                        pattern="[0-9]{2}:[0-9]{2}"
+                        onChange={handleTime}
+                        required
+                    />
+                </label>
+                <label className="alert alert-danger">Reservations cannot be made after time has passed</label>
+                <br />
+                <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => history.push("/")}
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled
+                >
+                    Submit
+                </button>
             </div>
         )
     } else {
@@ -120,6 +210,20 @@ export default function ValidateReservation() {
                         required
                     />
                 </label>
+                <br />
+                <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => history.push("/")}
+                >
+                    Cancel
+                </button>
+                <button
+                    type="submit"
+                    className="btn btn-primary"
+                >
+                    Submit
+                </button>
             </div >
         )
     }
