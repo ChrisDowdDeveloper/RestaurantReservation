@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ValidateReservation from "./ValidateReservation";
 import { useParams, useHistory } from "react-router-dom";
+import form from "./NewReservation";
 
 
 export default function EditReservation() {
@@ -11,17 +12,11 @@ export default function EditReservation() {
     const [partySize, setPartySize] = useState(0);
     const history = useHistory();
 
-    let form = {
-        "first_name": firstName,
-        "last_name": lastName,
-        "phone_number": number,
-        "party_size": partySize,
-    }
 
-    const handleFirst = (event) => setFirstName(...firstName, event.target.value);
-    const handleLast = (event) => setLastName(...lastName, event.target.value);
-    const handleSize = (event) => setPartySize(...partySize, event.target.value);
-    const handleNumber = (event) => setNumber(...number, event.target.value)
+    const handleFirst = (event) => setFirstName(...form.first_name, event.target.value);
+    const handleLast = (event) => setLastName(...form.last_name, event.target.value);
+    const handleSize = (event) => setPartySize(...form.party_size, event.target.value);
+    const handleNumber = (event) => setNumber(...form.mobile_number, event.target.value)
 
     function handleSubmit(event) {
         event.preventDefault();

@@ -16,9 +16,10 @@ export default function ValidateReservation({ form }) {
 
     form["reservation_date"] = resDate;
     form["reservation_time"] = resTime;
+    console.log(form)
 
 
-    if (resDate < today()) {
+    if (form.reservation_date < today()) {
         return (
             <div>
                 <label>
@@ -60,7 +61,7 @@ export default function ValidateReservation({ form }) {
                 </button>
             </div>
         )
-    } else if (resTime < timeOpen) {
+    } else if (form.reservation_time < timeOpen) {
         return (
             <div>
                 <label>
@@ -102,7 +103,7 @@ export default function ValidateReservation({ form }) {
                 </button>
             </div>
         )
-    } else if (resTime > timeClosed) {
+    } else if (form.reservation_time > timeClosed) {
         return (
             <div>
                 <label>
@@ -144,7 +145,7 @@ export default function ValidateReservation({ form }) {
                 </button>
             </div>
         )
-    } else if (resTime <= time) {
+    } else if (form.reservation_time <= time && form.reservation_date <= today()) {
         return (
             <div>
                 <label>
