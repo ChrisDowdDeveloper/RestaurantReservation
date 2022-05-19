@@ -4,6 +4,7 @@ import CustomerReservations from "../layout/Reservation/CustomerReservations";
 import useQuery from "../utils/useQuery";
 import { next, previous, today } from "../utils/date-time";
 import data from "./data";
+import tableData from "./tableData";
 import ErrorAlert from "../layout/ErrorAlert";
 import { Link } from "react-router-dom";
 
@@ -20,6 +21,7 @@ function Dashboard({ date }) {
   }
 
   const [reservations, setReservations] = useState(data);
+  const [tableData, setTableData] = useState(tableData);
   const [reservationsError, setReservationsError] = useState(null);
 
   /*useEffect(loadDashboard, [date]);
@@ -53,6 +55,9 @@ function Dashboard({ date }) {
         <CustomerReservations
           reservations={reservations}
         />
+      </div>
+      <div>
+        <Tables />
       </div>
       <ErrorAlert error={reservationsError} />
     </main>

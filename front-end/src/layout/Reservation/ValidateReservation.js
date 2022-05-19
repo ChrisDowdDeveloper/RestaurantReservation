@@ -145,7 +145,7 @@ export default function ValidateReservation({ form }) {
                 </button>
             </div>
         )
-    } else if (form.reservation_time <= time && form.reservation_date <= today()) {
+    } else if (form.reservation_time <= time && form.reservation_date === today()) {
         return (
             <div>
                 <label>
