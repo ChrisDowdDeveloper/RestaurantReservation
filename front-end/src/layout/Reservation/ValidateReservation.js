@@ -16,7 +16,6 @@ export default function ValidateReservation({ form }) {
 
     form["reservation_date"] = resDate;
     form["reservation_time"] = resTime;
-    console.log(form)
 
 
     if (form.reservation_date < today()) {

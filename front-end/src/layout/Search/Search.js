@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
-import SearchedReservations from "./SearchedReservations";
 import { searchReservation } from "../../utils/api";
 
 export default function Search() {
@@ -29,7 +28,6 @@ export default function Search() {
                 />
                 <button type="submit">Find</button>
             </form>
-            <SearchedReservations foundReservations={foundReservations} />
         </div>
     )
 }

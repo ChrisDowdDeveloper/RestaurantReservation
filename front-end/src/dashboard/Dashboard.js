@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import CustomerReservations from "../layout/Reservation/CustomerReservations";
+import Table from "../layout/Tables/Table";
 import useQuery from "../utils/useQuery";
 import { next, previous, today } from "../utils/date-time";
-import data from "./data";
-import tableData from "./tableData";
 import ErrorAlert from "../layout/ErrorAlert";
 import { Link } from "react-router-dom";
+
+/*
+  -Check endpoints in app.
+*/
 
 /**
  * Defines the dashboard page.
@@ -20,20 +23,35 @@ function Dashboard({ date }) {
     date = dateQuery;
   }
 
-  const [reservations, setReservations] = useState(data);
-  const [tableData, setTableData] = useState(tableData);
+  const [reservations, setReservations] = useState([]);
+  const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
-  /*useEffect(loadDashboard, [date]);
+  useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
+    listTables()
+      .then(setTables)
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
-  }*/
+  }
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    async function loadTables() {
+      const tableList = await listTables(abortController.signal);
+      setTables(tableList);
+    }
+    loadTables()
+    return () => abortController.abort();
+  }, []);
+
+  console.log(tables)
+
 
   return (
     <main>
@@ -52,12 +70,10 @@ function Dashboard({ date }) {
       </div>
       <br />
       <div>
-        <CustomerReservations
-          reservations={reservations}
-        />
+        <CustomerReservations reservations={reservations} />
       </div>
       <div>
-        <Tables />
+        <Table tables={tables} />
       </div>
       <ErrorAlert error={reservationsError} />
     </main>

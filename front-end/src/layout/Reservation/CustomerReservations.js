@@ -6,16 +6,18 @@ export default function CustomerReservations({ reservations }) {
     const { reservation_id } = useParams();
     return (
         <section>
-            {reservations.map(reservation => (
-                <article key={reservation.reservation_id}>
-                    {reservation.first_name}
-                    {reservation.last_name}
-                    {reservation.party_size}
-                    {reservation.mobile_number}
-                    <Link to={`/reservations/${reservation_id}/seat`}>Seat</Link>
-                    <Link to={`/reservations/${reservation_id}/edit`}>Edit</Link>
-                </article>
-            ))}
+            <div>
+                {reservations.map(reservation => (
+                    <article key={reservation.reservation_id}>
+                        {reservation.first_name}
+                        {reservation.last_name}
+                        {reservation.party_size}
+                        {reservation.mobile_number}
+                        <Link to={`/reservations/${reservation_id}/seat`}>Seat</Link>
+                        <Link to={`/reservations/${reservation_id}/edit`}>Edit</Link>
+                    </article>
+                ))}
+            </div>
         </section>
     )
 }
