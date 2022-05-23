@@ -59,6 +59,11 @@ async function fetchJson(url, options, onCancel) {
  *  a promise that resolves to a possibly empty array of reservation saved in the database.
  */
 
+/*
+  -Supposed to take the parameters that are added, and fetch the JSON from the backend with the parameters
+  -SHOULD* return the list of reservations that are made for the current date.
+*/
+
 export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
   console.log("url " + url)
