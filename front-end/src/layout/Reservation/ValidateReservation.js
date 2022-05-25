@@ -210,21 +210,7 @@ export default function ValidateReservation({ form }) {
                         required
                     />
                 </label>
-                <br />
-                <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => history.push("/")}
-                >
-                    Cancel
-                </button>
-                <button
-                    type="submit"
-                    className="btn btn-primary"
-                >
-                    Submit
-                </button>
-            </div >
+                </div>
         )
     }
 }

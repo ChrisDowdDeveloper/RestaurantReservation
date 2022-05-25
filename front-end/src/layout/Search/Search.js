@@ -16,6 +16,7 @@ export default function Search() {
             .then(setFoundReservations)
             .then((result) => history.go("/search"))
     }
+    console.log(foundReservations)
 
     return (
         <div>

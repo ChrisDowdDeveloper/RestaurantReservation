@@ -1,9 +1,10 @@
 const knex = require("../db/connection");
 
-function list(reservation_date) {
-    return knex("reservations")
-        .select("*")
-        .where({ "reservation_date": reservation_date })
+function list(reservationDate) {
+  return knex('reservations')
+    .select('*')
+    .where({ "reservation_date": reservationDate })
+    .orderBy('reservation_time')
 }
 
 function create(created) {
