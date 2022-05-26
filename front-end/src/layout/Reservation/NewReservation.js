@@ -7,7 +7,7 @@ export default function NewReservation({ date }) {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [number, setNumber] = useState(0);
-    const [partySize, setPartySize] = useState(0);
+    const [people, setPeople] = useState(0);
 
     const history = useHistory();
 
@@ -15,14 +15,14 @@ export default function NewReservation({ date }) {
         "first_name": firstName,
         "last_name": lastName,
         "mobile_number": number,
-        "party_size": partySize,
+        "people": people,
     }
 
 
     const handleFirstName = (event) => setFirstName(event.target.value);
     const handleLastName = (event) => setLastName(event.target.value);
     const handleNumber = (event) => setNumber(event.target.value);
-    const handleParty = (event) => setPartySize(event.target.value);
+    const handlePeople = (event) => setPeople(event.target.value);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -76,7 +76,7 @@ export default function NewReservation({ date }) {
                         name="people"
                         type="number"
                         required
-                        onChange={handleParty}
+                        onChange={handlePeople}
                     />
                 </label>
                 <br />

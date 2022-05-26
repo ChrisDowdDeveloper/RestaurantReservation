@@ -46,8 +46,6 @@ function Dashboard({ date, setDate }) {
     return () => abortController.abort();
   }, []);
 
-  console.log(tables)
-
 
   return (
     <main>
