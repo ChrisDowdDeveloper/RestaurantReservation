@@ -10,19 +10,17 @@ export default function CreateTable() {
     const history = useHistory();
 
     const tableForm = {
-        "tableName": tableName,
-        "tableCapacity": tableCapacity,
+        "table_name": tableName,
+        "capacity": tableCapacity,
     }
 
     const handleTable = (event) => setTableName(event.target.value);
 
-    function handleCapacity(event) {
-        setTableCapacity(event.target.value)
-    }
+    const handleCapacity = (event) => setTableCapacity(event.target.value)
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        createTable(tableForm).then((result) => history.push("/"))
+        createTable(tableForm).then(() => history.push("/"))
     }
 
 

@@ -1,4 +1,26 @@
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const service = require("./tables.service")
+
+/**
+ Table Validation
+*/
+
+function hasValidProperties(req, res, next) {
+    const { data: { table_name, capacity } = {} } = req.body;
+    if (!table_name || table_name.length < 2) {
+        return next({
+            status: 400,
+            message: "table_name"
+        })
+    }
+    if (!capacity || capacity === NaN || capacity < 1) {
+        return next({
+            status: 400,
+            message: "capacity"
+        })
+    }
+    return next();
+}
 
 /**
  * List handler for reservation resources
@@ -14,6 +36,6 @@ async function create(req, res, next) {
 }
 
 module.exports = {
-    list,
-    create,
+    list: asyncErrorBoundary(list),
+    create: [hasValidProperties, asyncErrorBoundary(create)],
 };

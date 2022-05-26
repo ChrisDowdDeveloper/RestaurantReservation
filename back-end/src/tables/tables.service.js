@@ -8,7 +8,7 @@ function create(created) {
     return knex("tables")
         .insert(created)
         .returning("*")
-        .then((createdReservation) => createdReservation[0])
+        .then((createdTable) => createdTable[0])
 }
 
 module.exports = {

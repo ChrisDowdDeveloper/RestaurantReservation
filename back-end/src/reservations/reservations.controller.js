@@ -7,45 +7,45 @@ const P = require("pino");
 */
 
 function hasValidProperties(req, res, next) {
-  const { data: { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = {} } = req.body
+  const { data: { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = {} } = req.body;
   const timePattern = /^[0-9]{2}:[0-9]{2}?(:[0-9]{2})$/;
-  if(!first_name || first_name.length < 0) {
+  if (!first_name || first_name.length < 0) {
     return next({
       status: 400,
       message: "first_name"
     })
   }
-  if(!last_name || last_name.length < 0) {
+  if (!last_name || last_name.length < 0) {
     return next({
       status: 400,
       message: "last_name"
-    }) 
+    })
   }
-  if(!mobile_number || mobile_number.length == 0) {
+  if (!mobile_number || mobile_number.length == 0) {
     return next({
       status: 400,
       message: "mobile_number"
     })
   }
-  if(!reservation_date || new Date(reservation_date) === NaN) {
+  if (!reservation_date || new Date(reservation_date) === NaN) {
     return next({
       status: 400,
       message: "reservation_date"
     })
   }
-  if(!reservation_time || reservation_time == !timePattern) {
+  if (!reservation_time || reservation_time == !timePattern) {
     return next({
       status: 400,
       message: "reservation_time"
     })
   }
-  if(people === NaN) {
+  if (people === NaN) {
     return next({
       status: 400,
       message: "people"
     })
   }
-  if(!people || people <= 0 || people  === NaN) {
+  if (!people || people <= 0 || people === NaN) {
     return next({
       status: 400,
       message: "people"
@@ -56,13 +56,13 @@ function hasValidProperties(req, res, next) {
 
 function validateReservationTime(req, res, next) {
   const { data: { reservation_time } = {} } = req.body;
-  if(reservation_time > "21:30") {
+  if (reservation_time > "21:30") {
     return next({
       status: 400,
       message: "reservation_time"
     })
   }
-  if(reservation_time < "09:30") {
+  if (reservation_time < "09:30") {
     return next({
       status: 400,
       message: "reservation_time"
@@ -75,10 +75,10 @@ function validateReservationTime(req, res, next) {
  * List handler for reservation resources
  */
 
- async function list(req, res) {
-   let reservationDate = req.query.date
+async function list(req, res) {
+  let reservationDate = req.query.date
   let reservations = await service.list(reservationDate)
-    res.json({ data: reservations });
+  res.json({ data: reservations });
 }
 
 async function create(req, res, next) {
