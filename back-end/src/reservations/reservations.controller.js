@@ -9,6 +9,7 @@ const P = require("pino");
 function hasValidProperties(req, res, next) {
   const { data: { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = {} } = req.body;
   const timePattern = /^[0-9]{2}:[0-9]{2}?(:[0-9]{2})$/;
+  const datePattern = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
   if (!first_name || first_name.length < 0) {
     return next({
       status: 400,
@@ -27,18 +28,24 @@ function hasValidProperties(req, res, next) {
       message: "mobile_number"
     })
   }
-  if (!reservation_date || new Date(reservation_date) === NaN) {
+  //reservation_date is not a date
+  //2022-26-05
+  //console.log(2022 - 26 - 05 == NaN + " This will tell me all I need to know")
+  console.log("Hello" == NaN)
+  if (!reservation_date || reservation_date !== datePattern) {
     return next({
       status: 400,
       message: "reservation_date"
     })
   }
-  if (!reservation_time || reservation_time == !timePattern) {
+  //reservation_time is not a time
+  if (!reservation_time || reservation_time !== timePattern) {
     return next({
       status: 400,
       message: "reservation_time"
     })
   }
+  //people is not a number
   if (people === NaN) {
     return next({
       status: 400,
