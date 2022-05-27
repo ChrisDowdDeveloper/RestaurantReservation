@@ -1,15 +1,14 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const P = require("pino");
+const { prependOnceListener } = require("../db/connection");
 
 /**
   Validator function for the create function
 */
 
 function hasValidProperties(req, res, next) {
-  const { data: { first_name, last_name, mobile_number, reservation_date, reservation_time, people } = {} } = req.body;
-  const timePattern = /^[0-9]{2}:[0-9]{2}?(:[0-9]{2})$/;
-  const datePattern = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
+  const { data: { first_name, last_name, mobile_number } = {} } = req.body;
   if (!first_name || first_name.length < 0) {
     return next({
       status: 400,
@@ -28,47 +27,75 @@ function hasValidProperties(req, res, next) {
       message: "mobile_number"
     })
   }
-  //reservation_date is not a date
-  //2022-26-05
-  //console.log(2022 - 26 - 05 == NaN + " This will tell me all I need to know")
-  console.log("Hello" == NaN)
-  if (!reservation_date || reservation_date !== datePattern) {
+  return next()
+}
+
+ function validDateProperty(req, res, next) {
+  const { data: { reservation_date } = {} } = req.body;
+  let today = new Date().toISOString().slice(0, 10)
+
+  if(new Date(reservation_date).getDay() === 1) {
+    return next({
+      status: 400,
+      message: "closed"
+    })
+  }
+  if (!reservation_date || isNaN(new Date(reservation_date))) {
     return next({
       status: 400,
       message: "reservation_date"
     })
   }
-  //reservation_time is not a time
-  if (!reservation_time || reservation_time !== timePattern) {
+  if(reservation_date < today) {
+    return next({
+      status: 400,
+      message: "future"
+    })
+  }
+  return next()
+ }
+
+function validPeopleProperty (req, res, next) {
+  const { data: { people } = {} } = req.body;
+  if(!people) {
+    return next({
+      status: 400, 
+      message: "people doesnt exist"
+    })
+  }
+  if(people <= 0) {
+    return next({
+      status: 400, 
+      message: "people size is not right"
+    })
+  }
+  if(typeof people !== 'number') {
+    return next({
+      status: 400, 
+      message: "people isnt a number"
+    })
+  }
+  return next();
+}
+
+function validateReservationTime(req, res, next) {
+  const { data: { reservation_time } = {} } = req.body;
+  const timePattern = /^[0-9]{2}:[0-9]{2}?(:[0-9]{2})$/;
+
+  if (!reservation_time || timePattern.test(reservation_time)) {
     return next({
       status: 400,
       message: "reservation_time"
     })
   }
-  //people is not a number
-  if (people === NaN) {
-    return next({
-      status: 400,
-      message: "people"
-    })
-  }
-  if (!people || people <= 0 || people === NaN) {
-    return next({
-      status: 400,
-      message: "people"
-    })
-  }
-  return next()
-}
-
-function validateReservationTime(req, res, next) {
-  const { data: { reservation_time } = {} } = req.body;
+  
   if (reservation_time > "21:30") {
     return next({
       status: 400,
       message: "reservation_time"
     })
   }
+
   if (reservation_time < "09:30") {
     return next({
       status: 400,
@@ -95,5 +122,10 @@ async function create(req, res, next) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create: [hasValidProperties, validateReservationTime, asyncErrorBoundary(create)],
+  create: [
+    hasValidProperties,
+    validDateProperty, 
+    validPeopleProperty,
+    validateReservationTime,
+    asyncErrorBoundary(create)],
 };
