@@ -22,7 +22,7 @@ export default function NewReservation({ date }) {
     const handleFirstName = (event) => setFirstName(event.target.value);
     const handleLastName = (event) => setLastName(event.target.value);
     const handleNumber = (event) => setNumber(event.target.value);
-    const handlePeople = (event) => setPeople(event.target.value);
+    const handlePeople = (event) => setPeople(parseInt(event.target.value));
 
     const handleSubmit = (event) => {
         event.preventDefault();

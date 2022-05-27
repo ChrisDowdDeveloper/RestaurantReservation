@@ -18,6 +18,8 @@ export default function Table({ tables }) {
         }
     }
 
+    console.log(tables)
+
     return (
         <div>
             {tables.map(table => (
@@ -25,7 +27,7 @@ export default function Table({ tables }) {
                     <h5>Table: {table.table_name}</h5>
                     <div>
                         <p>Capacity: {table.capacity}</p>
-                        <p data-table-id-status={table.table_id}>Status: </p>
+                        <p data-table-id-status={table.table_id}>Status: {"free" || "occupied"}</p>
 
                         <button data-table-id-finish={table.table_id} type="button" onClick={clearTable}>Finish</button>
 

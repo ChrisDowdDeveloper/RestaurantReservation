@@ -30,11 +30,11 @@ function hasValidProperties(req, res, next) {
   return next()
 }
 
- function validDateProperty(req, res, next) {
+function validDateProperty(req, res, next) {
   const { data: { reservation_date } = {} } = req.body;
   let today = new Date().toISOString().slice(0, 10)
 
-  if(new Date(reservation_date).getDay() === 1) {
+  if (new Date(reservation_date).getDay() === 1) {
     return next({
       status: 400,
       message: "closed"
@@ -46,32 +46,32 @@ function hasValidProperties(req, res, next) {
       message: "reservation_date"
     })
   }
-  if(reservation_date < today) {
+  if (reservation_date < today) {
     return next({
       status: 400,
       message: "future"
     })
   }
   return next()
- }
+}
 
-function validPeopleProperty (req, res, next) {
+function validPeopleProperty(req, res, next) {
   const { data: { people } = {} } = req.body;
-  if(!people) {
+  if (!people) {
     return next({
-      status: 400, 
+      status: 400,
       message: "people doesnt exist"
     })
   }
-  if(people <= 0) {
+  if (people <= 0) {
     return next({
-      status: 400, 
+      status: 400,
       message: "people size is not right"
     })
   }
-  if(typeof people !== 'number') {
+  if (typeof people !== 'number') {
     return next({
-      status: 400, 
+      status: 400,
       message: "people isnt a number"
     })
   }
@@ -81,6 +81,10 @@ function validPeopleProperty (req, res, next) {
 function validateReservationTime(req, res, next) {
   const { data: { reservation_time } = {} } = req.body;
   const timePattern = /^[0-9]{2}:[0-9]{2}?(:[0-9]{2})$/;
+  let today = new Date();
+  let hour = today.getHours();
+  let minutes = today.getMinutes();
+  let currentTime = `${hour}:${minutes}`;
 
   if (!reservation_time || timePattern.test(reservation_time)) {
     return next({
@@ -88,18 +92,25 @@ function validateReservationTime(req, res, next) {
       message: "reservation_time"
     })
   }
-  
+
   if (reservation_time > "21:30") {
     return next({
       status: 400,
-      message: "reservation_time"
+      message: "reservation_time after 9:30pm"
     })
   }
 
-  if (reservation_time < "09:30") {
+  if (reservation_time < "10:30") {
     return next({
       status: 400,
-      message: "reservation_time"
+      message: "reservation_time before 10:30am"
+    })
+  }
+
+  if (reservation_time < currentTime) {
+    return next({
+      status: 400,
+      message: "reservation_time is before current time"
     })
   }
   return next();
@@ -124,7 +135,7 @@ module.exports = {
   list: asyncErrorBoundary(list),
   create: [
     hasValidProperties,
-    validDateProperty, 
+    validDateProperty,
     validPeopleProperty,
     validateReservationTime,
     asyncErrorBoundary(create)],

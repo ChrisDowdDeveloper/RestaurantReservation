@@ -19,11 +19,16 @@ export default function SeatTable() {
   return (
     <div>
       <h1>Seat Table Page</h1>
-      {tables.map(table => (
-        <select name="table_id">
-          <option value={table.table_id}>{table.table_name} - {table.capacity}</option>
-        </select>
-      ))}
+      <select name="table_id">
+        {tables.map(table => (
+          <option
+            key={table.table_id}
+            value={table.table_id}>
+            {table.table_name} - {table.capacity}
+          </option>
+
+        ))}
+      </select>
     </div>
   )
 }

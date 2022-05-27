@@ -81,7 +81,7 @@ export default function ValidateReservation({ form }) {
                         placeholder="HH:MM"
                         pattern="[0-9]{2}:[0-9]{2}"
                         onChange={handleTime}
-                        required
+
                     />
                 </label>
                 <label className="alert alert-danger">Reservation must be made after 10:30am</label>
@@ -96,7 +96,7 @@ export default function ValidateReservation({ form }) {
                 <button
                     type="submit"
                     className="btn btn-primary"
-                    disabled
+
                 >
                     Submit
                 </button>
@@ -112,7 +112,7 @@ export default function ValidateReservation({ form }) {
                         placeholder="YYYY-MM-DD"
                         pattern="\d{4}-\d{2}-\d{2}"
                         onChange={handleDate}
-                        required
+
                     />
                 </label>
                 <br />
@@ -138,7 +138,7 @@ export default function ValidateReservation({ form }) {
                 <button
                     type="submit"
                     className="btn btn-primary"
-                    disabled
+
                 >
                     Submit
                 </button>
