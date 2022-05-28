@@ -18,7 +18,6 @@ export default function Table({ tables }) {
         }
     }
 
-    console.log(tables)
 
     return (
         <div>

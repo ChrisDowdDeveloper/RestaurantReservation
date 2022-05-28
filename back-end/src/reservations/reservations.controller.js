@@ -1,11 +1,21 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const P = require("pino");
-const { prependOnceListener } = require("../db/connection");
-
 /**
   Validator function for the create function
 */
+
+async function reservationExists(req, res, next) {
+  const { reservation_id } = req.params;
+  const reservation = await service.read(reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  return next({
+    status: 404,
+    message: "Reservation cannot be found"
+  })
+};
 
 function hasValidProperties(req, res, next) {
   const { data: { first_name, last_name, mobile_number } = {} } = req.body;
@@ -131,8 +141,15 @@ async function create(req, res, next) {
   res.status(201).json({ data: created });
 }
 
+async function read(req, res, next) {
+  const { reservation_id } = req.params;
+  const data = await service.read(reservation_id);
+  res.json({ data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
+  read: [asyncErrorBoundary(reservationExists), read],
   create: [
     hasValidProperties,
     validDateProperty,

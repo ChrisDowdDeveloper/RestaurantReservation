@@ -38,7 +38,7 @@ function Routes() {
       <Route path="/dashboard">
         <Dashboard date={date} setDate={setDate} />
       </Route>
-      <Route path={`/reservations/:reservation_id/seat`}>
+      <Route exact={true} path={"/reservations/:reservation_id/seat"}>
         <SeatTable />
       </Route>
       <Route path={"/reservations/:reservation_id/edit"}>

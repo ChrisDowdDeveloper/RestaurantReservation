@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { listTables } from "../../utils/api";
+import { useParams } from "react-router-dom";
+import { listTables, readReservation } from "../../utils/api";
 
 export default function SeatTable() {
+  const { reservation_id } = useParams()
   const [tables, setTables] = useState([]);
+
+  console.log(reservation_id)
+
+  useEffect(() => {
+    readReservation(reservation_id)
+  }, [reservation_id])
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -13,8 +21,6 @@ export default function SeatTable() {
     loadTables()
     return () => abortController.abort();
   }, []);
-
-  console.log(tables)
 
   return (
     <div>
