@@ -8,6 +8,7 @@ function list(reservationDate) {
 }
 
 function read(reservation_id) {
+    console.log(reservation_id)
     return knex("reservations")
         .select("*")
         .where({ "reservation_id": reservation_id })
