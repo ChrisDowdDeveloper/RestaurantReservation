@@ -1,22 +1,13 @@
-import React, { useState } from "react"
+import React from "react"
 import { useHistory } from "react-router";
 import { today } from "../../utils/date-time";
 
-export default function ValidateReservation({ form }) {
+export default function ValidateReservation({ form, reservationDate, setReservationDate, reservationTime, setReservationTime }) {
     let timeOpen = `10:30`;
     let timeClosed = `21:30`;
     let currentDate = new Date();
     let time = `${currentDate.getHours()}:${currentDate.getHours()}`
     const history = useHistory();
-    const [resDate, setResDate] = useState(today());
-    const [resTime, setResTime] = useState()
-
-    const handleDate = (event) => setResDate(event.target.value)
-    const handleTime = (event) => setResTime(event.target.value)
-
-    form["reservation_date"] = resDate;
-    form["reservation_time"] = resTime;
-
 
     if (form.reservation_date < today()) {
         return (
@@ -27,7 +18,7 @@ export default function ValidateReservation({ form }) {
                         type="date"
                         placeholder="YYYY-MM-DD"
                         pattern="\d{4}-\d{2}-\d{2}"
-                        onChange={handleDate}
+                        onChange={(event) => setReservationDate(event.target.value)}
                         required
                     />
                 </label>
@@ -39,7 +30,7 @@ export default function ValidateReservation({ form }) {
                         type="time"
                         placeholder="HH:MM"
                         pattern="[0-9]{2}:[0-9]{2}"
-                        onChange={handleTime}
+                        onChange={(event) => setReservationTime(event.target.value)}
                         required
                     />
                 </label>
@@ -69,7 +60,7 @@ export default function ValidateReservation({ form }) {
                         type="date"
                         placeholder="YYYY-MM-DD"
                         pattern="\d{4}-\d{2}-\d{2}"
-                        onChange={handleDate}
+                        onChange={(event) => setReservationDate(event.target.value)}
                         required
                     />
                 </label>
@@ -80,7 +71,7 @@ export default function ValidateReservation({ form }) {
                         type="time"
                         placeholder="HH:MM"
                         pattern="[0-9]{2}:[0-9]{2}"
-                        onChange={handleTime}
+                        onChange={(event) => setReservationTime(event.target.value)}
 
                     />
                 </label>
@@ -111,7 +102,7 @@ export default function ValidateReservation({ form }) {
                         type="date"
                         placeholder="YYYY-MM-DD"
                         pattern="\d{4}-\d{2}-\d{2}"
-                        onChange={handleDate}
+                        onChange={(event) => setReservationDate(event.target.value)}
 
                     />
                 </label>
@@ -122,7 +113,7 @@ export default function ValidateReservation({ form }) {
                         type="time"
                         placeholder="HH:MM"
                         pattern="[0-9]{2}:[0-9]{2}"
-                        onChange={handleTime}
+                        onChange={(event) => setReservationTime(event.target.value)}
                         required
                     />
                 </label>
@@ -153,7 +144,7 @@ export default function ValidateReservation({ form }) {
                         type="date"
                         placeholder="YYYY-MM-DD"
                         pattern="\d{4}-\d{2}-\d{2}"
-                        onChange={handleDate}
+                        onChange={(event) => setReservationDate(event.target.value)}
                         required
                     />
                 </label>
@@ -164,7 +155,7 @@ export default function ValidateReservation({ form }) {
                         type="time"
                         placeholder="HH:MM"
                         pattern="[0-9]{2}:[0-9]{2}"
-                        onChange={handleTime}
+                        onChange={(event) => setReservationTime(event.target.value)}
                         required
                     />
                 </label>
@@ -195,7 +186,7 @@ export default function ValidateReservation({ form }) {
                         type="date"
                         placeholder="YYYY-MM-DD"
                         pattern="\d{4}-\d{2}-\d{2}"
-                        onChange={handleDate}
+                        onChange={(event) => setReservationDate(event.target.value)}
                         required
                     />
                 </label>
@@ -206,7 +197,7 @@ export default function ValidateReservation({ form }) {
                         type="time"
                         placeholder="HH:MM"
                         pattern="[0-9]{2}:[0-9]{2}"
-                        onChange={handleTime}
+                        onChange={(event) => setReservationTime(event.target.value)}
                         required
                     />
                 </label>

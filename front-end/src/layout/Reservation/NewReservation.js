@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../../utils/api";
 import ValidateReservation from "./ValidateReservation";
+import { today } from "../../utils/date-time";
 
-export default function NewReservation({ date }) {
+export default function NewReservation() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [number, setNumber] = useState(0);
-    const [people, setPeople] = useState(0);
+    const [people, setPeople] = useState("");
+    const [reservationDate, setReservationDate] = useState(today());
+    const [reservationTime, setReservationTime] = useState("");
 
     const history = useHistory();
 
@@ -16,6 +19,8 @@ export default function NewReservation({ date }) {
         "last_name": lastName,
         "mobile_number": number,
         "people": people,
+        "reservation_date": reservationDate,
+        "reservation_time": reservationTime,
     }
 
 
@@ -80,7 +85,13 @@ export default function NewReservation({ date }) {
                     />
                 </label>
                 <br />
-                <ValidateReservation form={form} />
+                <ValidateReservation 
+                    form={form} 
+                    reservationDate={reservationDate}
+                    setReservationDate={setReservationDate} 
+                    reservationTime={reservationTime}
+                    setReservationTime={setReservationTime}
+                />
             </form>
         </div>
     );

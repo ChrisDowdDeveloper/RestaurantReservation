@@ -16,7 +16,7 @@ export default function CreateTable() {
 
     const handleTable = (event) => setTableName(event.target.value);
 
-    const handleCapacity = (event) => setTableCapacity(event.target.value)
+    const handleCapacity = (event) => setTableCapacity(parseInt(event.target.value))
 
     const handleSubmit = (event) => {
         event.preventDefault();

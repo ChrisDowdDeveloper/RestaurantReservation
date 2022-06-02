@@ -117,18 +117,20 @@ export async function createTable(tableForm, signal) {
   return await fetchJson(url, options, {});
 }
 
-export async function seatTable(table, reservation_id, signal) {
-  const { table_id } = table;
+export async function seatTable(table_id, reservation_id, signal) {
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
-  const options = {
-    method: "PUT",
-    headers,
-    body: JSON.stringify({ data: { reservation_id: reservation_id } }),
-    signal,
-  };
-  return await fetchJson(url, options, {});
+  console.log(url)
+  return await fetchJson(
+    url,
+    {
+      body: JSON.stringify({ data: { reservation_id } }),
+      headers,
+      method: "PUT",
+      signal,
+    },
+    []
+  );
 }
-
 export async function updateReservation(reservation, signal) {
   const url = `${API_BASE_URL}/reservations/${reservation.reservation_id}`;
   const options = {
@@ -156,8 +158,10 @@ export async function updateStatus(reservation_id, status, signal) {
   return await fetchJson(url, options, {});
 }
 
-export async function deleteTableStatus(table_id, signal) {
-  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+export async function deleteTableStatus(tableId, signal) {
+  console.log(tableId + "Passed into the function")
+  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
+  console.log(url)
   const options = {
     method: "DELETE",
     headers,
