@@ -3,6 +3,7 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 const hasOnlyValidProperties = require("../errors/hasOnlyValidProperties");
 const reservationService = require("../reservations/reservations.service");
+const { table } = require("../db/connection");
 
 
 const VALID_PROPERTIES_POST = [
@@ -13,6 +14,8 @@ const VALID_PROPERTIES_POST = [
 const VALID_PROPERTIES_PUT = [
     "reservation_id"
 ]
+
+
 
 // validation middleware: checks that table_name is at least 2 characters
 function tableNameLength(req, res, next) {
@@ -89,6 +92,17 @@ function tableCapacity(req, res, next) {
     }
 }
 
+function isOccupied(req, res, next) {
+    let tableStatus = res.locals.table.status;
+    if(tableStatus !== "open") {
+        return next();
+    }
+    return next({
+        status: 400,
+        message: "not occupied"
+    })
+}
+
 // validation middlware: checks if table status is free
 function tableStatusFree(req, res, next) {
     const { status } = res.locals.table;
@@ -135,8 +149,9 @@ async function update(req, res) {
 
 async function destroy(req, res, next) {
     const { table_id } = req.params;
-    await service.delete(table_id);
-    res.sendStatus(204);
+    const { status } = res.locals.table;
+    await service.delete(table_id, status);
+    res.sendStatus(200);
 }
 
 
@@ -159,6 +174,7 @@ module.exports = {
     ],
     delete: [
         asyncErrorBoundary(tableExists),
+        asyncErrorBoundary(isOccupied),
         asyncErrorBoundary(destroy)
     ]
   };

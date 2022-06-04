@@ -159,7 +159,6 @@ export async function updateStatus(reservation_id, status, signal) {
 }
 
 export async function deleteTableStatus(tableId, signal) {
-  console.log(tableId + "Passed into the function")
   const url = `${API_BASE_URL}/tables/${tableId}/seat`;
   console.log(url)
   const options = {
