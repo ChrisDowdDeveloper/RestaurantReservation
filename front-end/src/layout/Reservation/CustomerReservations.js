@@ -14,7 +14,7 @@ export default function CustomerReservations({ reservations }) {
                         {reservation.people} || 
                         {reservation.mobile_number} || 
                         {reservation.status}
-                        <Link to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link>
+                        {reservation.status === "seated" ? null : <Link to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link>}
                         <Link to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link>
                     </article>
                 ))}

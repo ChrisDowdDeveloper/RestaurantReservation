@@ -37,7 +37,7 @@ function destroy(table_id) {
     console.log(table_id)
     return knex("tables")
         .where({ "table_id": table_id })
-        .del(['status']);
+        .del();
 }
 
 module.exports = {

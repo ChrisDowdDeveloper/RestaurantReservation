@@ -158,8 +158,8 @@ export async function updateStatus(reservation_id, status, signal) {
   return await fetchJson(url, options, {});
 }
 
-export async function deleteTableStatus(tableId, signal) {
-  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
+export async function deleteTableStatus(table_id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
   console.log(url)
   const options = {
     method: "DELETE",

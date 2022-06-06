@@ -221,7 +221,7 @@ async function updateStatus(req, res) {
     status: status,
   }
   const updatedReservation = await service.update(updatedReservationData);
-  res.json({ data: updatedReservation });
+  res.status(200).json({ data: updatedReservation.status });
 }
 
 // updates reservation information
