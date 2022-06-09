@@ -3,7 +3,6 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 const hasOnlyValidProperties = require("../errors/hasOnlyValidProperties");
 const reservationService = require("../reservations/reservations.service");
-const { table } = require("../db/connection");
 
 
 const VALID_PROPERTIES_POST = [
@@ -149,8 +148,15 @@ async function update(req, res) {
 
 async function destroy(req, res, next) {
     const { table_id } = req.params;
-    const { status } = res.locals.table;
+    const { status, reservation_id } = res.locals.table;
+    const finishStatus = {
+        status: "finished",
+        reservation_id: reservation_id,
+    };
     await service.delete(table_id, status);
+    let newStatus = await reservationService.statusUpdate(finishStatus)
+    console.log(newStatus)
+    await reservationService.delete(reservation_id)
     res.sendStatus(200);
 }
 

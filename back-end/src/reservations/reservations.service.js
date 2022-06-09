@@ -21,6 +21,14 @@ function update(updatedReservation) {
         .update(updatedReservation, "*");
 }
 
+function statusUpdate(finishStatus) {
+    return knex("reservations")
+        .select("*")
+        .where({ reservation_id: finishStatus.reservation_id })
+        .update(finishStatus, "*")
+        .then((updatedStatus) => updatedStatus[0]);
+}
+
 function create(created) {
     return knex("reservations")
         .insert(created)
@@ -28,9 +36,17 @@ function create(created) {
         .then((createdReservation) => createdReservation[0])
 }
 
+function destroy(reservation_id) {
+    return knex("reservations")
+        .where({ "reservation_id": reservation_id })
+        .del()
+}
+
 module.exports = {
     list,
     read,
     create,
     update,
+    statusUpdate,
+    delete: destroy,
 }
