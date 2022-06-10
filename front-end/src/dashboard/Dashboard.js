@@ -28,13 +28,12 @@ function Dashboard({ date, setDate }) {
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listTables()
-      .then(setTables)
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
   }
+  
 
   useEffect(() => {
     const abortController = new AbortController();

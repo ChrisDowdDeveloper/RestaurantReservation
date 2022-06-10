@@ -215,14 +215,10 @@ function read(req, res) {
 
 // updates a reservation status
 async function updateStatus(req, res) {
-  const { reservation, status } = res.locals;
-  const updatedReservationData = {
-    ...reservation,
-    status: status,
-  }
-  const updatedReservation = await service.update(updatedReservationData);
-  let reservationStatus = updatedReservation[0].status
-  res.sendStatus(200).json({ reservationStatus });
+  const reservation_id = req.params;
+  const status = req.body.data;
+  await service.update(reservation_id, status);
+  res.status(200).json({ data: status });
 }
 
 // updates reservation information

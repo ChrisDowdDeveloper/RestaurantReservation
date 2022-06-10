@@ -154,9 +154,7 @@ async function destroy(req, res, next) {
         reservation_id: reservation_id,
     };
     await service.delete(table_id, status);
-    let newStatus = await reservationService.statusUpdate(finishStatus)
-    console.log(newStatus)
-    await reservationService.delete(reservation_id)
+    await reservationService.update(finishStatus)
     res.sendStatus(200);
 }
 
@@ -168,7 +166,8 @@ module.exports = {
         hasOnlyValidProperties(...VALID_PROPERTIES_POST, "reservation_id"), 
         tableNameLength,
         capacityIsNumber,
-        asyncErrorBoundary(create)],
+        asyncErrorBoundary(create),
+    ],
     update: [
         hasProperties(...VALID_PROPERTIES_PUT), 
         hasOnlyValidProperties(...VALID_PROPERTIES_PUT), 
