@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+//import { useHistory } from "react-router";
 import { searchReservation } from "../../utils/api";
 
 export default function Search() {
 
-    const history = useHistory();
+    //const history = useHistory();
     const [number, setNumber] = useState();
     const [foundReservations, setFoundReservations] = useState();
 
@@ -12,11 +12,22 @@ export default function Search() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        searchReservation(number)
-            .then(setFoundReservations)
-            .then((result) => history.go("/search"))
+        console.log("button pressed")
+        let result = searchReservation(number)
+        console.log(result)
     }
-    console.log(foundReservations)
+
+    function Display() {
+        return (
+            <div>
+                {foundReservations.map(reservation => (
+                    <div key={reservation.reservation_id}>
+                        {reservation.first_name}
+                    </div>
+                ))}
+            </div>
+        )
+    }
 
     return (
         <div>
@@ -29,6 +40,7 @@ export default function Search() {
                 />
                 <button type="submit">Find</button>
             </form>
+            {foundReservations ? <Display /> : null}
         </div>
     )
 }
