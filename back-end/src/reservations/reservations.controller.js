@@ -131,7 +131,7 @@ function statusBooked(req, res, next) {
 // if query is date, check that the selected date has reservations that aren't finished
 // if query is mobile_number, look for reservations matching that number
 async function byDateOrPhone(req, res, next) {
-  const { date, number } = req.query;
+  const { date, mobile_number } = req.query;
   if (date) {
     const reservations = await service.list(date);
     if (reservations.length) {
@@ -144,8 +144,8 @@ async function byDateOrPhone(req, res, next) {
       });
     }
   }
-  if (number) {
-    const reservation = await service.find(number);
+  if (mobile_number) {
+    const reservation = await service.find(mobile_number);
     res.locals.data = reservation;
     return next();
   }
@@ -229,8 +229,8 @@ async function updateReservation(req, res) {
     ...reservation,
     ...data,
   }
-  const updatedReservation = await service.update(updatedReservationData);
-  res.json({ data: updatedReservation });
+  await service.update(updatedReservationData);
+  res.json({ data: data });
 }
 
 module.exports = {

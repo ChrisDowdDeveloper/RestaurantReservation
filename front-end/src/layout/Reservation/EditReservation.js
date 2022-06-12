@@ -29,8 +29,6 @@ export default function EditReservation() {
             setLastName(loadedRes.last_name)
             setNumber(loadedRes.mobile_number)
             setPartySize(loadedRes.party_size)
-            //setReservationDate(loadedRes.reservationDate)
-            //setReservationTime(loadedRes.reservationTime)
         }
         loadReservation();
         return () => ac.abort();
@@ -38,14 +36,12 @@ export default function EditReservation() {
 
     const handleFirst = (event) => setFirstName(event.target.value);
     const handleLast = (event) => setLastName(event.target.value);
-    //const handleSize = (event) => setPartySize(event.target.value);
     const handleNumber = (event) => setNumber(event.target.value);
-    //const handleDate = (event) => setReservationDate(event.target.value);
-    //const handleTime = (event) => setReservationTime(event.target.value);
 
     function handleSubmit(event) {
         event.preventDefault();
-        updateReservation(newFormData)
+        console.log(reservation_id)
+        updateReservation(newFormData, reservation_id)
             .then((result) => history.push("/dashboard"));
     }
 
@@ -59,7 +55,7 @@ export default function EditReservation() {
                         name="first_name"
                         id="first_name"
                         placeholder="First Name"
-                        value={firstName ||''}
+                        value={firstName || ''}
                         required
                         onChange={handleFirst}
                     />

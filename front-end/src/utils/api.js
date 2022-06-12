@@ -131,12 +131,13 @@ export async function seatTable(table_id, reservation_id, signal) {
     []
   );
 }
-export async function updateReservation(reservation, signal) {
-  const url = `${API_BASE_URL}/reservations/${reservation.reservation_id}`;
+export async function updateReservation(newFormData, reservation_id, signal) {
+  console.log(reservation_id)
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({ data: reservation }),
+    body: JSON.stringify({ data: newFormData }),
     signal,
   };
   return await fetchJson(url, options, {});
@@ -149,6 +150,7 @@ export async function searchReservation(number, signal) {
 
 export async function updateStatus(reservation_id, newStatus, signal) {
   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+  console.log(url)
   const options = {
     method: "PUT",
     headers,

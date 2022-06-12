@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-//import { useHistory } from "react-router";
-import { searchReservation } from "../../utils/api";
+import { Link, useHistory } from "react-router-dom";
+import { searchReservation, updateStatus } from "../../utils/api";
 
 export default function Search() {
 
-    //const history = useHistory();
+    const history = useHistory();
     const [number, setNumber] = useState();
     const [foundReservations, setFoundReservations] = useState();
 
@@ -12,9 +12,18 @@ export default function Search() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log("button pressed")
-        let result = searchReservation(number)
-        console.log(result)
+        searchReservation(number)
+            .then(setFoundReservations)
+    }
+
+    async function cancelReservation(reservation_id) {
+        if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")) {
+            async function finishStatus() {
+                await updateStatus(reservation_id, "cancelled");
+                history.go("/");
+            }
+            finishStatus();
+        }
     }
 
     function Display() {
@@ -23,6 +32,12 @@ export default function Search() {
                 {foundReservations.map(reservation => (
                     <div key={reservation.reservation_id}>
                         {reservation.first_name}
+                        {reservation.last_name}
+                        {reservation.mobile_number}
+                        {reservation.status}
+                        {reservation.people}
+                        {reservation.status === "booked" ? <Link to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link> : null}
+                        {reservation.status === "booked" ? <button data-reservation-id-cancel={reservation.reservation_id} onClick={() => cancelReservation(reservation.reservation_id)}>Cancel Reservation</button> : null}
                     </div>
                 ))}
             </div>
@@ -40,7 +55,7 @@ export default function Search() {
                 />
                 <button type="submit">Find</button>
             </form>
-            {foundReservations ? <Display /> : null}
+            {foundReservations ? <Display /> : "No reservations found"}
         </div>
     )
 }
