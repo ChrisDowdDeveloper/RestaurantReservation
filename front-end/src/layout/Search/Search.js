@@ -17,7 +17,7 @@ export default function Search() {
     }
 
     async function cancelReservation(reservation_id) {
-        if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")) {
+        if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
             async function finishStatus() {
                 await updateStatus(reservation_id, "cancelled");
                 history.go("/");

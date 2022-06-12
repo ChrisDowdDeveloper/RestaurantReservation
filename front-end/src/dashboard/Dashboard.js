@@ -4,6 +4,7 @@ import CustomerReservations from "../layout/Reservation/CustomerReservations";
 import Table from "../layout/Tables/Table";
 import { next, previous, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
+import "../layout/Layout.css";
 
 /*
   -Check endpoints in app.
@@ -49,26 +50,30 @@ function Dashboard({ date, setDate }) {
   return (
     <main>
       <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
+      <div>
         <h4 className="mb-0">Reservations for date: {date}</h4>
       </div>
-      <div>
-      <button onClick={() => setDate(previousDay)}>
-        Previous
-      </button>
-      <button onClick={() => setDate(currentDay)}>
-        Today
-      </button>
-      <button onClick={() => setDate(nextDay)}>
-        Next 
-      </button>
+      <div className="btn-group">
+        <button className="btn btn-primary" onClick={() => setDate(previousDay)}>
+          Previous
+        </button>
+        <button className="btn btn-primary actve" onClick={() => setDate(currentDay)}>
+          Today
+        </button>
+        <button className="btn btn-primary" onClick={() => setDate(nextDay)}>
+          Next 
+        </button>
       </div>
       <br />
-      <div>
-        <CustomerReservations reservations={reservations} />
-      </div>
-      <div>
-        <Table tables={tables} />
+      <div className="container">
+        <div className="row align-items-start">
+          <div className="col">
+            <CustomerReservations reservations={reservations} />
+          </div>
+          <div className="col">
+            <Table tables={tables} />
+          </div>
+        </div>
       </div>
       <ErrorAlert error={reservationsError} />
     </main>
