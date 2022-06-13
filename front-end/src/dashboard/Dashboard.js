@@ -34,7 +34,7 @@ function Dashboard({ date, setDate }) {
       .catch(setReservationsError);
     return () => abortController.abort();
   }
-  
+
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -61,7 +61,7 @@ function Dashboard({ date, setDate }) {
           Today
         </button>
         <button className="btn btn-primary" onClick={() => setDate(nextDay)}>
-          Next 
+          Next
         </button>
       </div>
       <br />
@@ -70,7 +70,7 @@ function Dashboard({ date, setDate }) {
           <div className="col">
             <CustomerReservations reservations={reservations} />
           </div>
-          <div className="col">
+          <div className="tableSection">
             <Table tables={tables} />
           </div>
         </div>

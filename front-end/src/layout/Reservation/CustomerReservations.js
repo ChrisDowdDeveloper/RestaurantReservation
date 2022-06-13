@@ -30,7 +30,7 @@ export default function CustomerReservations({ reservations }) {
                     </tr>
                 </thead>
                 <tbody>
-                {reservations.map(reservation => (
+                    {reservations.map(reservation => (
                         <tr key={reservation.reservation_id}>
                             <th scope="row">{reservation.reservation_id}</th>
                             <td>{reservation.first_name}</td>
@@ -38,8 +38,8 @@ export default function CustomerReservations({ reservations }) {
                             <td>{reservation.people}</td>
                             <td>{reservation.mobile_number}</td>
                             <td>{reservation.status}</td>
-                            <td>{reservation.status === "seated" ? null : <Link to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link>}</td>
-                            <td>{reservation.status === "booked" ? <button data-reservation-id-cancel={reservation.reservation_id} onClick={() => cancelReservation(reservation.reservation_id)}>Cancel Reservation</button> : null}</td>
+                            <td>{reservation.status === "seated" ? null : <button type="button" className="btn btn-success btn-md" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</button>}</td>
+                            <td>{reservation.status === "booked" ? <button type="button" className="btn btn-danger btn-sm" data-reservation-id-cancel={reservation.reservation_id} onClick={() => cancelReservation(reservation.reservation_id)}>Cancel Reservation</button> : null}</td>
                         </tr>
                     ))}
                 </tbody>
