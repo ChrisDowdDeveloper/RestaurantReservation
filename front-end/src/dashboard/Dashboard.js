@@ -49,11 +49,12 @@ function Dashboard({ date, setDate }) {
 
   return (
     <main>
-      <h1>Dashboard</h1>
+      <h1 className="dash">Dashboard</h1>
       <div>
         <h4 className="mb-0">Reservations for date: {date}</h4>
+        <ErrorAlert error={reservationsError}/>
       </div>
-      <div className="btn-group">
+      <div className="btn-group" id="buttons">
         <button className="btn btn-primary" onClick={() => setDate(previousDay)}>
           Previous
         </button>
@@ -75,7 +76,6 @@ function Dashboard({ date, setDate }) {
           </div>
         </div>
       </div>
-      <ErrorAlert error={reservationsError} />
     </main>
   );
 }

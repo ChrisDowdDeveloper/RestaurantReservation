@@ -26,11 +26,11 @@ export default function Table({ tables }) {
     return (
         <div>
             <p>________________________</p>
-            <h2>-Tables-</h2>
+            <h2 className="dash">-Tables-</h2>
             <div className="container">
                 <div className="col">
                     {tables.map(table => (
-                        <div key={table.table_id}>
+                        <div className="table" key={table.table_id}>
                             <h5>Table: {table.table_name}</h5>
                             <div>
                                 <p>Capacity: {table.capacity}</p>
