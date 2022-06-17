@@ -1,8 +1,8 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
-import { updateStatus } from "../../utils/api";
+import { useHistory, Link } from "react-router-dom";
+import { listReservations, listTables, updateStatus } from "../../utils/api";
 
-export default function CustomerReservations({ reservations }) {
+export default function CustomerReservations({ reservations, date }) {
 
     const history = useHistory();
 
@@ -10,6 +10,8 @@ export default function CustomerReservations({ reservations }) {
         if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
             async function finishStatus() {
                 await updateStatus(reservation_id, "cancelled");
+                await listReservations({date})
+                await listTables();
                 history.go("/");
             }
             finishStatus();
@@ -38,7 +40,7 @@ export default function CustomerReservations({ reservations }) {
                             <td>{reservation.people}</td>
                             <td>{reservation.mobile_number}</td>
                             <td>{reservation.status}</td>
-                            <td>{reservation.status === "seated" ? null : <button type="button" className="btn btn-success btn-md" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</button>}</td>
+                            <td>{reservation.status === "seated" ? null : <button type="button" className="btn btn-success btn-md"><Link to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link></button>}</td>
                             <td>{reservation.status === "booked" ? <button type="button" className="btn btn-danger btn-sm" data-reservation-id-cancel={reservation.reservation_id} onClick={() => cancelReservation(reservation.reservation_id)}>Cancel Reservation</button> : null}</td>
                         </tr>
                     ))}

@@ -1,4 +1,5 @@
 const knex = require("../db/connection");
+const reservationsService = require("../reservations/reservations.service");
 
 
 // list all tables - sorted by table_name
@@ -33,11 +34,12 @@ function update(updatedTable) {
         .then((updatedTables) => updatedTables[0]);
 }
 
-function destroy(table_id) {
-    return knex("tables")
-        .where({ "table_id": table_id })
-        .del();
-}
+async function destroy(finishTable) {
+    return await knex("tables")
+      .where({ table_id: finishTable.table_id })
+      .update(finishTable, "*")
+      .then((updatedTables) => updatedTables[0]);
+  }
 
 module.exports = {
     create,

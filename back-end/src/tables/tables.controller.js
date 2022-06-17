@@ -92,8 +92,8 @@ function tableCapacity(req, res, next) {
 }
 
 function isOccupied(req, res, next) {
-    let tableStatus = res.locals.table.status;
-    if(tableStatus !== "open") {
+    const table = res.locals.table
+    if(table.status !== "open") {
         return next();
     }
     return next({
@@ -147,14 +147,18 @@ async function update(req, res) {
 }
 
 async function destroy(req, res, next) {
-    const { table_id } = req.params;
-    const { status, reservation_id } = res.locals.table;
+    const finishTable = {
+        table_id: res.locals.table.table_id,
+        status: "finished",
+        reservation_id: null,
+    }
     const finishStatus = {
         status: "finished",
-        reservation_id: reservation_id,
+        reservation_id: res.locals.table.reservation_id,
     };
-    await service.delete(table_id, status);
-    await reservationService.update(finishStatus)
+    let finished = await service.delete(finishTable);
+    console.log(finished)
+    await reservationService.statusUpdate(finishStatus)
     res.sendStatus(200);
 }
 

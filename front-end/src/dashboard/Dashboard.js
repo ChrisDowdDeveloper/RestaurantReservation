@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import { listReservations, listTables, deleteTableStatus } from "../utils/api";
 import CustomerReservations from "../layout/Reservation/CustomerReservations";
 import Table from "../layout/Tables/Table";
 import { next, previous, today } from "../utils/date-time";
@@ -35,7 +35,6 @@ function Dashboard({ date, setDate }) {
     return () => abortController.abort();
   }
 
-
   useEffect(() => {
     const abortController = new AbortController();
     async function loadTables() {
@@ -45,6 +44,17 @@ function Dashboard({ date, setDate }) {
     loadTables()
     return () => abortController.abort();
   }, []);
+
+  async function handleTable(table_id) {
+    if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")) {
+        const abortController = new AbortController();
+        async function finishedTable() {
+            await deleteTableStatus(table_id, abortController.signal);
+            loadDashboard();
+        }
+        finishedTable();
+    }
+  }
 
 
   return (
@@ -69,10 +79,10 @@ function Dashboard({ date, setDate }) {
       <div className="container">
         <div className="row align-items-start">
           <div className="col">
-            <CustomerReservations reservations={reservations} />
+            <CustomerReservations reservations={reservations} date={date} />
           </div>
           <div className="tableSection">
-            <Table tables={tables} />
+            <Table tables={tables} handleTable={handleTable}/>
           </div>
         </div>
       </div>
