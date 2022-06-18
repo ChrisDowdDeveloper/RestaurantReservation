@@ -14,7 +14,7 @@ const app = express();
 
 app.set("db", knex);
 app.all('*', (req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://restaurantreservation-client.herokuapp.com/");
+    res.header("Access-Control-Allow-Origin", "https://restaurantreservation-client.herokuapp.com");
     next();
 });
 
