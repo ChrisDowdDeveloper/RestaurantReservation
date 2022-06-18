@@ -216,12 +216,9 @@ function read(req, res) {
 // updates a reservation status
 async function updateStatus(req, res) {
   const { reservation_id } = req.params;
-  const changeStatus = {
-    reservation_id,
-    status: "cancelled",
-  }
-  await service.statusUpdate(changeStatus);
-  res.status(200).json({ data: { "status": changeStatus.status } });
+  const { status } = req.body.data;
+  await service.statusUpdate(reservation_id, status);
+  res.json({ data: { status } });
 }
 
 // updates a reservation

@@ -155,12 +155,9 @@ async function destroy(req, res, next) {
         status: "open",
         reservation_id: null,
     }
-    const changeStatus = {
-        status: "finished",
-        reservation_id: res.locals.table.reservation_id,
-    };
+    const newStatus = "finished"
     await service.delete(finishTable);
-    await reservationService.statusUpdate(changeStatus)
+    await reservationService.statusUpdate(res.locals.table.reservation_id, newStatus)
     res.sendStatus(200);
 }
 

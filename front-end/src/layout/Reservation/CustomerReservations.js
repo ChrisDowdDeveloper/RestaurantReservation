@@ -16,6 +16,7 @@ export default function CustomerReservations({ reservations, date }) {
                 history.go("/");
             }
             finishStatus();
+            history.go("/")
         }
     }
 
