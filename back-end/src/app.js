@@ -12,6 +12,7 @@ const tablesRouter = require("./tables/tables.router");
 
 const app = express();
 
+app.set("db", knex);
 app.use(cors({
     origin: "*",
 }));
