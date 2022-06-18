@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { searchReservation, updateStatus } from "../../utils/api";
+import ErrorAlert from "../ErrorAlert";
 
 //Allows user to search for all reservations made with a specific phone number
 export default function Search() {
@@ -8,6 +9,7 @@ export default function Search() {
     const history = useHistory();
     const [number, setNumber] = useState();
     const [foundReservations, setFoundReservations] = useState();
+    const [error, setError] = useState(null);
 
     const handleNumber = (event) => setNumber(event.target.value);
 
@@ -15,15 +17,18 @@ export default function Search() {
         event.preventDefault();
         searchReservation(number)
             .then(setFoundReservations)
+            .catch(setError);
     }
 
     async function cancelReservation(reservation_id) {
         if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
             async function finishStatus() {
-                await updateStatus(reservation_id, "cancelled");
+                await updateStatus(reservation_id, "cancelled")
+                    .catch(setError);
                 history.go("/");
             }
-            finishStatus();
+            finishStatus()
+                .catch(setError);
         }
     }
 
@@ -51,6 +56,7 @@ export default function Search() {
 
     return (
         <div>
+            <ErrorAlert error={error}/>
             <h1>Search by Number Here</h1>
             <form onSubmit={handleSubmit}>
                 <input

@@ -1,27 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { listReservations, listTables, updateStatus } from "../../utils/api";
 
 export default function CustomerReservations({ reservations, date }) {
 
     const history = useHistory();
-
+    const [error, setError] = useState(null)
     //Cancels the reservation
     async function cancelReservation(reservation_id) {
         if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
+            const abortController = new AbortController();
             async function finishStatus() {
-                await updateStatus(reservation_id, "cancelled");
-                await listReservations({date})
-                await listTables();
+                await updateStatus(reservation_id, "cancelled", abortController.signal)
+                    .catch(setError);
+                await listReservations({date}, abortController.signal)
+                    .catch(setError);
+                await listTables(abortController.signal)
+                    .catch(setError);
                 history.go("/");
             }
-            finishStatus();
-            history.go("/")
+            finishStatus()
+                .catch(setError);
+            history.go("/");
         }
     }
 
     return (
         <div className="card mt-1">
+            <ErrorAlert error={error}/>
             {reservations.map(reservation => (
             <div className="card-body" key={reservation.reservation_id}>
                 <h4 className="card-title">

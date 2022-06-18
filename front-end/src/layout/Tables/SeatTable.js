@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { listTables, seatTable } from "../../utils/api";
+import ErrorAlert from "../ErrorAlert";
 
 //Allows user to seat a reservation to a certain table
 export default function SeatTable() {
@@ -8,6 +9,7 @@ export default function SeatTable() {
   const { reservation_id } = useParams();
   const [tables, setTables] = useState([]);
   const [ tableId, setTableId ] = useState(0);
+  const [error, setError] = useState(null);
 
   //Loads table data
   useEffect(() => {
@@ -15,9 +17,10 @@ export default function SeatTable() {
     async function loadTables() {
       const tableList = await listTables(abortController.signal)
       setTables(tableList)
-      return () => abortController.abort();
+        .catch(setError);
     }
     loadTables()
+      .catch(setError);
     return () => abortController.abort();
   }, [reservation_id]);
 
@@ -25,17 +28,20 @@ export default function SeatTable() {
     event.preventDefault();
     const controller = new AbortController();
     seatTable(tableId, reservation_id, controller.signal)
-    .then(()=> history.push("/"))
+      .then(()=> history.push("/"))
+      .catch(setError);
     return () => controller.abort()
   };
 
   const handleTable = event => {
     event.preventDefault();
-    setTableId(event.target.value);
+    setTableId(event.target.value)
+      .catch(setError);
   }
 
   return (
     <div>
+      <ErrorAlert error={error}/>
       <h1>Seat Table Page</h1>
       <form onSubmit={handleSubmit}>
         <select 

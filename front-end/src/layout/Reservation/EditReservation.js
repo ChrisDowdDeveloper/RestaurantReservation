@@ -5,6 +5,7 @@ import { readReservation, updateReservation } from "../../utils/api";
 
 export default function EditReservation() {
     const { reservation_id } = useParams();
+    const [error, setError] = useState(null);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [number, setNumber] = useState(0);
@@ -30,8 +31,10 @@ export default function EditReservation() {
             setLastName(loadedRes.last_name)
             setNumber(loadedRes.mobile_number)
             setPartySize(loadedRes.party_size)
+                .catch(setError);
         }
-        loadReservation();
+        loadReservation()
+            .catch(setError);
         return () => ac.abort();
     }, [reservation_id])
 
@@ -41,13 +44,14 @@ export default function EditReservation() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        console.log(reservation_id)
         updateReservation(newFormData, reservation_id)
-            .then((result) => history.push("/dashboard"));
+            .then((result) => history.push("/dashboard"))
+            .catch(setError);
     }
 
     return (
-        < div >
+        <div>
+            <ErrorAlert error={error}/>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="FirstName">
                     First Name:

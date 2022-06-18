@@ -20,7 +20,7 @@ import "../layout/Layout.css";
 function Dashboard({ date, setDate }) {
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
+  const [error, setError] = useState(null);
   const currentDay = today()
   const previousDay = previous(date)
   const nextDay = next(date)
@@ -31,12 +31,13 @@ function Dashboard({ date, setDate }) {
   //Fetches the reservations on the date selected, and a list of all tables.
   function loadDashboard() {
     const abortController = new AbortController();
-    setReservationsError(null);
+    setError(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
-      .catch(setReservationsError);
+      .catch(setError);
     listTables(abortController.signal)
-      .then(setTables);
+      .then(setTables)
+      .catch(setError);
     return () => abortController.abort();
   }
 
@@ -47,7 +48,8 @@ function Dashboard({ date, setDate }) {
         async function finishedTable() {
             await deleteTableStatus(table_id, abortController.signal);
         }
-        finishedTable();
+        finishedTable()
+          .catch(setError);
         history.go("/")
     }
     history.go("/");
@@ -64,7 +66,7 @@ function Dashboard({ date, setDate }) {
               Reservations for Date: {currentDay}
             </h4>
           </div>
-        <ErrorAlert error={reservationsError}/>
+        <ErrorAlert error={error}/>
           <button type="button" className="btn btn-primary" onClick={() => setDate(previousDay)}>
             Previous
           </button>
