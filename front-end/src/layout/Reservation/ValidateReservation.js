@@ -2,7 +2,10 @@ import React from "react"
 import { useHistory } from "react-router";
 import { today } from "../../utils/date-time";
 
-export default function ValidateReservation({ form, reservationDate, setReservationDate, reservationTime, setReservationTime }) {
+
+//Validates the fields
+//If there is an error, it disables the Submit button and displays the error message.
+export default function ValidateReservation({ form, setReservationDate, setReservationTime }) {
     let timeOpen = `10:30`;
     let timeClosed = `21:30`;
     let currentDate = new Date();

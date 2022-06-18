@@ -85,6 +85,8 @@ export async function listReservations(params, signal) {
  *  a promise that resolves the saved deck, which will now have an `id` property.
  */
 
+
+//Calls the API to create a reservation
 export async function createReservation(form, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`)
   const options = {
@@ -96,16 +98,19 @@ export async function createReservation(form, signal) {
   return await fetchJson(url, options);
 }
 
+//Calls the API to get the correct reservation by the reservation ID
 export async function readReservation(reservation_id, signal) {
   const url = `${API_BASE_URL}/reservations/${reservation_id}`
   return await fetchJson(url, { signal });
 }
 
+//Calls the API to return all the tables
 export async function listTables(signal) {
   const url = `${API_BASE_URL}/tables`
   return await fetchJson(url, { headers, signal }, []);
 }
 
+///Calls the API to create a table
 export async function createTable(tableForm, signal) {
   const url = `${API_BASE_URL}/tables`;
   const options = {
@@ -117,9 +122,9 @@ export async function createTable(tableForm, signal) {
   return await fetchJson(url, options, {});
 }
 
+//Calls the API to update a table status to "occupied"
 export async function seatTable(table_id, reservation_id, signal) {
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
-  console.log(url)
   return await fetchJson(
     url,
     {
@@ -131,8 +136,9 @@ export async function seatTable(table_id, reservation_id, signal) {
     []
   );
 }
+
+//Calls the API to update the reservation by the reservation ID
 export async function updateReservation(newFormData, reservation_id, signal) {
-  console.log(reservation_id)
   const url = `${API_BASE_URL}/reservations/${reservation_id}`;
   const options = {
     method: "PUT",
@@ -143,11 +149,13 @@ export async function updateReservation(newFormData, reservation_id, signal) {
   return await fetchJson(url, options, {});
 }
 
+//Calls the API to search the reservation by the mobile number associated with it
 export async function searchReservation(number, signal) {
   const url = `${API_BASE_URL}/reservations?mobile_number=${number}`;
   return await fetchJson(url, { signal });
 }
 
+//Calls the API to update the status of the reservation to "seated" or "finished"
 export async function updateStatus(reservation_id, newStatus, signal) {
   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
   const options = {
@@ -159,6 +167,7 @@ export async function updateStatus(reservation_id, newStatus, signal) {
   return await fetchJson(url, options, {});
 }
 
+//Calls the API to update the table status back to "Free"
 export async function deleteTableStatus(table_id, signal) {
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
   return await fetch(url, { headers, method: "DELETE", signal }, []);

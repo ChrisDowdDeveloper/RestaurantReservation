@@ -6,6 +6,7 @@ export default function CustomerReservations({ reservations, date }) {
 
     const history = useHistory();
 
+    //Cancels the reservation
     async function cancelReservation(reservation_id) {
         if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
             async function finishStatus() {
@@ -19,33 +20,22 @@ export default function CustomerReservations({ reservations, date }) {
     }
 
     return (
-        <div className="table-responsive">
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Reservation ID</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Party Size</th>
-                        <th scope="col">Mobile Number</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {reservations.map(reservation => (
-                        <tr key={reservation.reservation_id}>
-                            <th scope="row">{reservation.reservation_id}</th>
-                            <td>{reservation.first_name}</td>
-                            <td>{reservation.last_name}</td>
-                            <td>{reservation.people}</td>
-                            <td>{reservation.mobile_number}</td>
-                            <td>{reservation.status}</td>
-                            <td>{reservation.status === "seated" ? null : <button type="button" className="btn btn-success btn-md"><Link to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link></button>}</td>
-                            <td>{reservation.status === "booked" ? <button type="button" className="btn btn-danger btn-sm" data-reservation-id-cancel={reservation.reservation_id} onClick={() => cancelReservation(reservation.reservation_id)}>Cancel Reservation</button> : null}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div className="card mt-1">
+            {reservations.map(reservation => (
+            <div className="card-body" key={reservation.reservation_id}>
+                <h4 className="card-title">
+                    {reservation.first_name} {reservation.last_name}
+                </h4>
+                <h6 className="card-text">Phone Number: </h6> {reservation.mobile_number}
+                <h6 className="card-text">Date of Reservation: </h6>{reservation.reservation_date}
+                <h6 className="card-text">Time of Reservation: </h6>{reservation.reservation_time}
+                <h6 className="card-text">Party Size: </h6>{reservation.people}
+                <h6 className="card-text">Reservation Status: </h6> {reservation.status}
+                <br />
+                {reservation.status === "seated" ? null : <button type="button" className="btn btn-success btn-md"><Link style={{color: 'white'}} to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link></button>}
+                {reservation.status === "booked" ? <button type="button" className="btn btn-danger btn-md" data-reservation-id-cancel={reservation.reservation_id} onClick={() => cancelReservation(reservation.reservation_id)}>Cancel Reservation</button> : null}
+            </div>
+            ))}
         </div>
     )
 }

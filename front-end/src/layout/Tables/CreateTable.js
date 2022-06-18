@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { createTable } from "../../utils/api";
 import ValidateTable from "./ValidateTable";
 
+//Allows user to create a Table
 export default function CreateTable() {
     const [tableName, setTableName] = useState("");
     const [tableCapacity, setTableCapacity] = useState(1);
@@ -25,6 +26,8 @@ export default function CreateTable() {
 
 
     return (
+        <div>
+            <h1>Create A Table</h1>
         <form onSubmit={handleSubmit}>
             <label>Table Name</label>
             <input
@@ -46,6 +49,7 @@ export default function CreateTable() {
                 tableName={tableName}
                 history={history}
             />
-        </form >
+        </form>
+        </div>
     )
 }

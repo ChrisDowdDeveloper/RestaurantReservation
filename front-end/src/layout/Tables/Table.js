@@ -1,25 +1,28 @@
 import React from "react";
 
 export default function Table({ tables, handleTable }) {
-
     return (
-        <div>
-            <p>________________________</p>
-            <h2 className="dash">-Tables-</h2>
-            <div className="container">
-                <div className="col">
+        <div className="table-responsive">
+            <h2>-Tables-</h2>
+            <table className="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Table Name</th>
+                        <th scope="col">Capacity</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {tables.map(table => (
-                        <div className="table" key={table.table_id}>
-                            <h5>Table: {table.table_name}</h5>
-                            <div>
-                                <p>Capacity: {table.capacity}</p>
-                                <p data-table-id-status={table.table_id}>Status: {table.status === "open" ? "free" : "occupied"}</p>
-                            </div>
-                            {table.status !== "open" ? <button type="button" data-table-id-finish={table.table_id} onClick={() => handleTable(table.table_id)}>Finish</button> : null}
-                        </div>
+                        <tr key={table.table_id}>
+                            <td>{table.table_name}</td>
+                            <td>{table.capacity}</td>
+                            <td>{table.status}</td>
+                            <td>{table.status !== "open" ? <button type="button" className="btn btn-danger btn-md" data-table-id-finish={table.table_id} onClick={() => handleTable(table.table_id)}>Finish</button> : null}</td>
+                        </tr>
                     ))}
-                </div>
-            </div>
+                </tbody>
+            </table>
         </div>
     )
 }

@@ -20,7 +20,7 @@ const VALID_PROPERTIES = [
   "updated_at",
 ]
 
-// validation middleware: checks that reservation_date has a valid date value
+// Validation Middleware--checks that reservation date has been correctly sent
 function dateIsValid(req, res, next) {
   const { reservation_date } = req.body.data;
   const date = Date.parse(reservation_date);
@@ -34,7 +34,7 @@ function dateIsValid(req, res, next) {
   }
 }
 
-// validation middleware: checks that reservation_time has a valid date value
+// Validation Middleware--checks that reservation time has been corrently sent
 function timeIsValid(req, res, next) {
   const { reservation_time } = req.body.data;
   const regex = new RegExp("([01]?[0-9]|2[0-3]):[0-5][0-9]");
@@ -48,7 +48,7 @@ function timeIsValid(req, res, next) {
   }
 }
 
-// validation middleware: checks that the value of people is a number
+// Validation Middleware--checks that the value of people is a number
 function peopleIsNumber(req, res, next) {
   let people = req.body.data.people;
   if (typeof people === "number") {
@@ -60,7 +60,7 @@ function peopleIsNumber(req, res, next) {
   })
 }
 
-// validation middleware: checks that the reservation_date & reservation_time are not in the past
+// Validation Middleware--checks that the reservation date & reservation time have not passed
 function notInPast(req, res, next) {
   const { reservation_date, reservation_time } = req.body.data;
   const reservation = new Date(`${reservation_date} PDT`).setHours(reservation_time.substring(0, 2), reservation_time.substring(3));
@@ -76,7 +76,7 @@ function notInPast(req, res, next) {
 }
 
 
-// validation middleware: checks that the reservation_date is not a Tuesday
+// Validation Middleware--checks that the reservation date is not on a Tuesday
 function notTuesday(req, res, next) {
   const { reservation_date } = req.body.data;
   const date = new Date(reservation_date);
@@ -92,13 +92,13 @@ function notTuesday(req, res, next) {
 }
 
 
-// validation middleware: checks that the reservation_time is during operating hours
+// Validation Middleware--checks that the reservation time is during hours of operation
 function whenOpen(req, res, next) {
   const { reservation_time } = req.body.data;
-  const open = 1030;
-  const close = 2130;
+  const openTime = 1030;
+  const closeTime = 2130;
   const reservation = reservation_time.substring(0, 2) + reservation_time.substring(3);
-  if (reservation > open && reservation < close) {
+  if (reservation > openTime && reservation < closeTime) {
     return next();
   } else {
     return next({
@@ -108,7 +108,7 @@ function whenOpen(req, res, next) {
   }
 }
 
-// validation middleware: if a status is included when posting a new reservation, the only status allowed is "booked"
+// Validation Middleware--checks if the reservation status is set to "booked" by default
 function statusBooked(req, res, next) {
   const { status } = req.body.data;
   if (status) {
@@ -127,7 +127,7 @@ function statusBooked(req, res, next) {
 
 
 
-// validation middleware: checks the request query 
+// Validation Middleware--checks the request query 
 // if query is date, check that the selected date has reservations that aren't finished
 // if query is mobile_number, look for reservations matching that number
 async function byDateOrPhone(req, res, next) {
@@ -151,7 +151,7 @@ async function byDateOrPhone(req, res, next) {
   }
 }
 
-// validation middleware: checks if a reservation_id exists
+// Validation Middleware--checks if reservation id exists
 async function reservationExists(req, res, next) {
   const { reservation_id } = req.params;
   const data = await service.read(reservation_id);
@@ -166,7 +166,7 @@ async function reservationExists(req, res, next) {
   }
 }
 
-// validation middleware: checks that status type is valid
+// Validation Middleware--checks that the status type is valid
 function statusIsValid(req, res, next) {
   const { status } = req.body.data;
   const validValues = ["booked", "seated", "finished", "cancelled"];
@@ -181,7 +181,7 @@ function statusIsValid(req, res, next) {
   }
 }
 
-// validation middleware: checks that status is not currently finished
+// Validation Middleware--checks that status is not finished
 function statusIsNotFinished(req, res, next) {
   const { reservation } = res.locals;
   if (reservation.status === "finished") {
@@ -195,7 +195,7 @@ function statusIsNotFinished(req, res, next) {
 }
 
 
-// list reservations by date
+// list the reservations
 function list(req, res) {
   const { data } = res.locals;
   res.json({ data: data });
@@ -207,7 +207,7 @@ async function create(req, res) {
   res.status(201).json({ data: reservation });
 }
 
-// reads a reservation by reservation_id
+// reads a reservation
 function read(req, res) {
   const { reservation } = res.locals;
   res.json({ data: reservation });
@@ -215,13 +215,16 @@ function read(req, res) {
 
 // updates a reservation status
 async function updateStatus(req, res) {
-  const reservation_id = req.params;
-  const status = req.body.data;
-  await service.statusUpdate(reservation_id, status);
-  res.status(200).json({ data: status });
+  const { reservation_id } = req.params;
+  const changeStatus = {
+    reservation_id,
+    status: "cancelled",
+  }
+  await service.statusUpdate(changeStatus);
+  res.status(200).json({ data: { "status": changeStatus.status } });
 }
 
-// updates reservation information
+// updates a reservation
 async function updateReservation(req, res) {
   const { reservation } = res.locals;
   const { data } = req.body;

@@ -16,7 +16,7 @@ const VALID_PROPERTIES_PUT = [
 
 
 
-// validation middleware: checks that table_name is at least 2 characters
+// Validation Middleware--checks that the table name is at least 2 characters
 function tableNameLength(req, res, next) {
     const { table_name } = req.body.data;
     if (table_name.length > 1) {
@@ -29,7 +29,7 @@ function tableNameLength(req, res, next) {
     }
 }
 
-// validation middleware: checks that capacity is a number
+// Validation Middleware--checks that capacity is a number
 function capacityIsNumber(req, res, next) {
     const { capacity } = req.body.data;
     if (typeof capacity === "number") {
@@ -42,7 +42,7 @@ function capacityIsNumber(req, res, next) {
     }
 }
 
-// validation middleware: checks that table_name exists
+// Validation Middleware--checks that a table name exists
 async function tableExists(req, res, next) {
     const { table_id } = req.params;
     const data = await service.read(table_id);
@@ -57,7 +57,7 @@ async function tableExists(req, res, next) {
     }
 }
 
-// validation middleware: checks that reservation exists
+// Validation Middleware--checks that reservation exists
 async function reservationExists(req, res, next) {
     const { reservation_id } = req.body.data;
     const data = await reservationService.read(reservation_id);
@@ -77,7 +77,7 @@ async function reservationExists(req, res, next) {
     }
 }
 
-// validation middleware: checks that table had sufficient capacity
+// Validation Middleware--checks that the table has the capacity to fit the people
 function tableCapacity(req, res, next) { 
     let capacity  = res.locals.table.capacity;
     let people  = res.locals.reservation.people;
@@ -91,6 +91,7 @@ function tableCapacity(req, res, next) {
     }
 }
 
+// Validation Middleware--checks if the table is occupied
 function isOccupied(req, res, next) {
     const table = res.locals.table
     if(table.status !== "open") {
@@ -102,7 +103,7 @@ function isOccupied(req, res, next) {
     })
 }
 
-// validation middlware: checks if table status is free
+// Validation Middlware--checks if table is free
 function tableStatusFree(req, res, next) {
     const { status } = res.locals.table;
     if (status === "open") {
@@ -114,7 +115,7 @@ function tableStatusFree(req, res, next) {
     });
 }
 
-// list all tables - sorted by table_name
+// list all tables
 async function list(req, res) {
     res.json({ data: await service.list() });
   }
@@ -146,19 +147,20 @@ async function update(req, res) {
     res.json({ data: updatedTable });
 }
 
+// sets the table status to open
+// sets the reservation status to finished
 async function destroy(req, res, next) {
     const finishTable = {
         table_id: res.locals.table.table_id,
-        status: "finished",
+        status: "open",
         reservation_id: null,
     }
-    const finishStatus = {
+    const changeStatus = {
         status: "finished",
         reservation_id: res.locals.table.reservation_id,
     };
-    let finished = await service.delete(finishTable);
-    console.log(finished)
-    await reservationService.statusUpdate(finishStatus)
+    await service.delete(finishTable);
+    await reservationService.statusUpdate(changeStatus)
     res.sendStatus(200);
 }
 

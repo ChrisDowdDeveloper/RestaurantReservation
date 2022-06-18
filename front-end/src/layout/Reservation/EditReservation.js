@@ -21,6 +21,7 @@ export default function EditReservation() {
     }
     const history = useHistory();
 
+    //Loads the specific reservation and details
     useEffect(() => {
         const ac = new AbortController();
         async function loadReservation() {

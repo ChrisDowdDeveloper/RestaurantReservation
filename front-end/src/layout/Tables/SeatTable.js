@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { listTables, seatTable } from "../../utils/api";
 
+//Allows user to seat a reservation to a certain table
 export default function SeatTable() {
   const history = useHistory();
   const { reservation_id } = useParams();
   const [tables, setTables] = useState([]);
   const [ tableId, setTableId ] = useState(0);
 
+  //Loads table data
   useEffect(() => {
     const abortController = new AbortController();
     async function loadTables() {

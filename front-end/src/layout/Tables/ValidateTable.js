@@ -1,5 +1,7 @@
 import React from "react"
 
+//Validates the table
+//Disables Submit button, and shows the error of what is wrong
 export default function ValidateTable({ tableCapacity, tableName, history }) {
 
     if (tableCapacity >= 1 && tableName.length >= 2) {
