@@ -12,24 +12,7 @@ const tablesRouter = require("./tables/tables.router");
 
 const app = express();
 
-app.set("db", knex);
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-  });
-  
-  app.get('/jokes/random', (req, res) => {
-    request(
-      { url: 'https://restaurantreservation-client.herokuapp.com/' },
-      (error, response, body) => {
-        if (error || response.statusCode !== 200) {
-          return res.status(500).json({ type: 'error', message: err.message });
-        }
-  
-        res.json(JSON.parse(body));
-      }
-    )
-  });
+app.use(cors());
 app.use(express.json());
 
 app.use("/reservations", reservationsRouter);
