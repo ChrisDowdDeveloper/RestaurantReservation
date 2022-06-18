@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { listReservations, listTables, updateStatus } from "../../utils/api";
+import ErrorAlert from "../ErrorAlert";
 
 export default function CustomerReservations({ reservations, date }) {
 
