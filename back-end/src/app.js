@@ -13,9 +13,11 @@ const tablesRouter = require("./tables/tables.router");
 const app = express();
 
 app.set("db", knex);
-app.use(cors({
-    origin: "*",
-}));
+app.all('*', (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "https://restaurantreservation-client.herokuapp.com/");
+    next();
+});
+
 app.use(express.json());
 
 app.use("/reservations", reservationsRouter);
