@@ -39,7 +39,6 @@ async function fetchJson(url, options, onCancel) {
 
     const payload = await response.json();
     console.log(payload)
-    console.warn(xhr.responseText)
     if (payload.error) {
       return Promise.reject({ message: payload.error });
     }
