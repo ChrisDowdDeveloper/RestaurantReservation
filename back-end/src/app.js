@@ -14,7 +14,7 @@ const app = express();
 
 app.set("db", knex);
 app.use(cors({
-    origin: "*",
+    origin: "https://restaurantreservation-client.herokuapp.com",
 }));
 app.use(express.json());
 
