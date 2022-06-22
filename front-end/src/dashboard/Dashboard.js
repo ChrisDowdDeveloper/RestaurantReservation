@@ -63,7 +63,7 @@ function Dashboard({ date, setDate }) {
         <div className="col-md-6 col-sm-12">
           <div className="d-md-flex mb-3">
             <h4 className="mb-0">
-              Reservations for Date: {currentDay}
+              Reservations for Date: {date}
             </h4>
           </div>
         <ErrorAlert error={error}/>

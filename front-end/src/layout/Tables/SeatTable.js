@@ -6,21 +6,23 @@ import ErrorAlert from "../ErrorAlert";
 //Allows user to seat a reservation to a certain table
 export default function SeatTable() {
   const history = useHistory();
+  const [error, setError] = useState(null);
   const { reservation_id } = useParams();
   const [tables, setTables] = useState([]);
   const [ tableId, setTableId ] = useState(0);
-  const [error, setError] = useState(null);
 
   //Loads table data
   useEffect(() => {
     const abortController = new AbortController();
     async function loadTables() {
-      const tableList = await listTables(abortController.signal)
-      setTables(tableList)
-        .catch(setError);
+      try {
+        const tableList = await listTables(abortController.signal)
+        setTables(tableList);
+      } catch(e) {
+        setError(e)
+      }
     }
     loadTables()
-      .catch(setError);
     return () => abortController.abort();
   }, [reservation_id]);
 
@@ -29,14 +31,12 @@ export default function SeatTable() {
     const controller = new AbortController();
     seatTable(tableId, reservation_id, controller.signal)
       .then(()=> history.push("/"))
-      .catch(setError);
     return () => controller.abort()
   };
 
   const handleTable = event => {
     event.preventDefault();
     setTableId(event.target.value)
-      .catch(setError);
   }
 
   return (

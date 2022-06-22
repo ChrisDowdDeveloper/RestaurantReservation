@@ -55,18 +55,30 @@ export default function Search() {
     }
 
     return (
-        <div>
+        <div className="card my-3 border-secondary">
             <ErrorAlert error={error}/>
-            <h1>Search by Number Here</h1>
-            <form onSubmit={handleSubmit}>
-                <input
-                    name="mobile_number"
-                    placeholder="Enter a customer's phone number"
-                    onChange={handleNumber}
-                />
-                <button type="submit">Find</button>
-            </form>
-            {foundReservations ? <Display /> : "No reservations found"}
+            <h3 className="card-header text-white bg-secondary">Search</h3>
+            <div className="card-body">
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label className="form-label" htmlFor="mobile_number">Mobile number:</label>
+                        <input  
+                            className="form-control"
+                            id="mobile_number"
+                            name="mobile_number"
+                            type="text"
+                            placeholder="Enter a customer's phone number"
+                            value={number}
+                            onChange={handleNumber}
+                            required={true}
+                        />
+                        <div>
+                            <button type="button" className="btn btn-secondary m-2" onClick={()=> history.goBack()}> Cancel </button>
+                            <button type="submit" className="btn btn-primary m-2"> Find </button>
+                        </div>
+                    </div>
+                </form>
+            </div>  {foundReservations ? <Display /> : ""}   
         </div>
     )
 }
