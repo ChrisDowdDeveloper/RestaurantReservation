@@ -35,7 +35,6 @@ export default function CreateTable() {
 
 return (
     <div className="card my-3 border-secondary">
-<<<<<<< HEAD
         <ErrorAlert error={error}/>
         <h3 className="card-header text-white bg-secondary">Create Table</h3>
         <div className="card-body">
@@ -44,32 +43,17 @@ return (
                 <label className="form-label" htmlFor="first_name">Table Name: </label>
                 <input 
                     className="form-control" 
-=======
-        <h3 className="card-header text-white bg-secondary">Create Table</h3>
-        <div className="card-body"></div>
-        <ErrorAlert error={error} />
-        <form onSubmit={handleSubmit}>
-            <div className="col-10 form-group">
-                <label className="form-label" htmlFor="first_name">Table Name: </label>
-                <input
-                    className="form-control"
->>>>>>> a72c3c6a802349e7d0babc234f44605992198b41
                     name="table_name"
                     onChange={handleTable}
                     required
                 />
                 <label className="form-label" htmlFor="last_name">Table Capacity:</label>
-<<<<<<< HEAD
                 <input  
-=======
-                <input
->>>>>>> a72c3c6a802349e7d0babc234f44605992198b41
                     className="form-control"
                     name="capacity"
                     type="number"
                     required
                     onChange={handleCapacity}
-<<<<<<< HEAD
                 />
                 <br/>
                 <ValidateTable tableCapacity={tableCapacity} tableName={tableName} history={history} />
@@ -78,19 +62,4 @@ return (
         </div>
     </div>   
     )
-=======
-                /><br />
-                <div>
-                    <button type="button" className="btn btn-secondary m-2" onClick={() => history.goBack()}> Cancel </button>
-                    <button type="submit" className="btn btn-primary m-2"> Submit </button>
-                </div>
-            </div>
-            <ValidateTable
-                tableCapacity={tableCapacity}
-                tableName={tableName}
-                history={history}
-            />
-        </form>
-    </div>
->>>>>>> a72c3c6a802349e7d0babc234f44605992198b41
 }
