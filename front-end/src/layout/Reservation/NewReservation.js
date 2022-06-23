@@ -27,15 +27,20 @@ export default function NewReservation() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        createReservation(reservation)
-            .then((result) => history.push("/dashboard"))
-            .catch(setError);
+        const abortController = new AbortController()
+        try {
+            createReservation(reservation, abortController.signal)
+                .then((result) => history.push("/dashboard"))
+        } catch (e) {
+            setError(e)
+        }
+        return () => abortController.abort();
     }
 
     return (
         <div>
-            <ErrorAlert error={error}/>
-            <FormComponent 
+            <ErrorAlert error={error} />
+            <FormComponent
                 type="New"
                 reservation={reservation}
                 setFirstName={setFirstName}
