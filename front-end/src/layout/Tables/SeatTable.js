@@ -9,7 +9,7 @@ export default function SeatTable() {
   const [error, setError] = useState(null);
   const { reservation_id } = useParams();
   const [tables, setTables] = useState([]);
-  const [ tableId, setTableId ] = useState(0);
+  const [tableId, setTableId] = useState(0);
 
   //Loads table data
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function SeatTable() {
       try {
         const tableList = await listTables(abortController.signal)
         setTables(tableList);
-      } catch(e) {
+      } catch (e) {
         setError(e)
       }
     }
@@ -28,23 +28,32 @@ export default function SeatTable() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const controller = new AbortController();
-    seatTable(tableId, reservation_id, controller.signal)
-      .then(()=> history.push("/"))
-    return () => controller.abort()
+    const abortController = new AbortController();
+    try {
+      seatTable(tableId, reservation_id, abortController.signal)
+        .then(() => history.push("/"))
+    } catch (e) {
+      setError(e)
+    }
+    return () => abortController.abort()
   };
 
   const handleTable = event => {
     event.preventDefault();
-    setTableId(event.target.value)
+    const abortController = new AbortController();
+    try {
+      setTableId(event.target.value, abortController.signal)
+    } catch (e) {
+      setError(e)
+    }
   }
 
   return (
     <div>
-      <ErrorAlert error={error}/>
+      <ErrorAlert error={error} />
       <h1>Seat Table Page</h1>
       <form onSubmit={handleSubmit}>
-        <select 
+        <select
           name="table_id"
           onChange={handleTable}
         >

@@ -15,20 +15,27 @@ export default function Search() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        searchReservation(number)
-            .then(setFoundReservations)
-            .catch(setError);
+        try {
+            searchReservation(number)
+                .then(setFoundReservations)
+        } catch (e) {
+            setError(e)
+        }
     }
 
     async function cancelReservation(reservation_id) {
         if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
+            const abortController = new AbortController();
             async function finishStatus() {
-                await updateStatus(reservation_id, "cancelled")
-                    .catch(setError);
-                history.go("/");
+                try {
+                    await updateStatus(reservation_id, "cancelled", abortController.signal)
+                    history.go("/");
+                } catch (e) {
+                    setError(e)
+                }
             }
             finishStatus()
-                .catch(setError);
+            return () => abortController.abort();
         }
     }
 
@@ -36,19 +43,19 @@ export default function Search() {
         return (
             <div className="card mt-1">
                 {foundReservations.map(reservation => (
-                <div className="card-body" key={reservation.reservation_id}>
-                    <h5 className="card-title">
-                        {reservation.first_name} {reservation.last_name}
-                    </h5>
-                    <h6>Phone Number: </h6>{reservation.mobile_number}
-                    <h6>Party Size: </h6>{reservation.people}
-                    <h6>Reservation Date: </h6>{reservation.reservation_date}
-                    <h6>Reservation Time: </h6>{reservation.reservation_time}
-                    <h6>Reservation Status: </h6>{reservation.status}
-                    <br />
-                    {reservation.status === "booked" ? <button type="button" className="btn btn-success"><Link style={{color: 'white'}} to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link></button> : null}
-                    {reservation.status === "booked" ? <button type="button" className="btn btn-danger" data-reservation-id-cancel={reservation.reservation_id} onClick={() => cancelReservation(reservation.reservation_id)}>Cancel Reservation</button> : null}
-                </div>
+                    <div className="card-body" key={reservation.reservation_id}>
+                        <h5 className="card-title">
+                            {reservation.first_name} {reservation.last_name}
+                        </h5>
+                        <h6>Phone Number: </h6>{reservation.mobile_number}
+                        <h6>Party Size: </h6>{reservation.people}
+                        <h6>Reservation Date: </h6>{reservation.reservation_date}
+                        <h6>Reservation Time: </h6>{reservation.reservation_time}
+                        <h6>Reservation Status: </h6>{reservation.status}
+                        <br />
+                        {reservation.status === "booked" ? <button type="button" className="btn btn-success"><Link style={{ color: 'white' }} to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link></button> : null}
+                        {reservation.status === "booked" ? <button type="button" className="btn btn-danger" data-reservation-id-cancel={reservation.reservation_id} onClick={() => cancelReservation(reservation.reservation_id)}>Cancel Reservation</button> : null}
+                    </div>
                 ))}
             </div>
         )
@@ -56,13 +63,13 @@ export default function Search() {
 
     return (
         <div className="card my-3 border-secondary">
-            <ErrorAlert error={error}/>
+            <ErrorAlert error={error} />
             <h3 className="card-header text-white bg-secondary">Search</h3>
             <div className="card-body">
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label className="form-label" htmlFor="mobile_number">Mobile number:</label>
-                        <input  
+                        <input
                             className="form-control"
                             id="mobile_number"
                             name="mobile_number"
@@ -73,12 +80,12 @@ export default function Search() {
                             required={true}
                         />
                         <div>
-                            <button type="button" className="btn btn-secondary m-2" onClick={()=> history.goBack()}> Cancel </button>
+                            <button type="button" className="btn btn-secondary m-2" onClick={() => history.goBack()}> Cancel </button>
                             <button type="submit" className="btn btn-primary m-2"> Find </button>
                         </div>
                     </div>
                 </form>
-            </div>  {foundReservations ? <Display /> : ""}   
+            </div>  {foundReservations ? <Display /> : ""}
         </div>
     )
 }

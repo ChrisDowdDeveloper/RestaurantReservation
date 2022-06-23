@@ -29,18 +29,18 @@ export default function EditReservation() {
     useEffect(() => {
         const ac = new AbortController();
         async function loadReservation() {
-        try {
-            const loadedRes = await readReservation(reservation_id, ac.signal);
-            setFirstName(loadedRes.first_name)
-            setLastName(loadedRes.last_name)
-            setNumber(loadedRes.mobile_number)
-            setPartySize(loadedRes.people)
-            setReservationDate(loadedRes.reservation_date)
-            setReservationTime(loadedRes.reservation_time)
-        } catch(e) {
-            setError(e)
+            try {
+                const loadedRes = await readReservation(reservation_id, ac.signal);
+                setFirstName(loadedRes.first_name)
+                setLastName(loadedRes.last_name)
+                setNumber(loadedRes.mobile_number)
+                setPartySize(loadedRes.people)
+                setReservationDate(loadedRes.reservation_date)
+                setReservationTime(loadedRes.reservation_time)
+            } catch (e) {
+                setError(e)
             }
-        } 
+        }
         loadReservation()
         return () => ac.abort();
     }, [reservation_id]);
@@ -48,16 +48,21 @@ export default function EditReservation() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        updateReservation(reservation)
-            .then((result) => history.push("/dashboard"))
-            .catch(setError);
+        const abortController = new AbortController();
+        try {
+            updateReservation(reservation, abortController.signal)
+                .then((result) => history.push("/dashboard"))
+        } catch (e) {
+            setError(e)
+        }
+        return () => abortController.abort();
     }
 
     return (
         <div>
-            <ErrorAlert error={error}/>
-            <FormComponent 
-                error={error} 
+            <ErrorAlert error={error} />
+            <FormComponent
+                error={error}
                 handleSubmit={handleSubmit}
                 reservation={reservation}
                 type="Edit"

@@ -32,29 +32,34 @@ function Dashboard({ date, setDate }) {
   function loadDashboard() {
     const abortController = new AbortController();
     setError(null);
-    listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      .catch(setError);
-    listTables(abortController.signal)
-      .then(setTables)
-      .catch(setError);
+    try {
+      listReservations({ date }, abortController.signal)
+        .then(setReservations)
+      listTables(abortController.signal)
+        .then(setTables)
+    } catch (e) {
+      setError(e)
+    }
     return () => abortController.abort();
   }
 
   //Handles the request to finish a reservation and makes the table status to "Open" once more.
   async function handleTable(table_id) {
     if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")) {
-        const abortController = new AbortController();
-        async function finishedTable() {
-            await deleteTableStatus(table_id, abortController.signal);
+      const abortController = new AbortController();
+      async function finishedTable() {
+        try {
+          await deleteTableStatus(table_id, abortController.signal);
+        } catch (e) {
+          setError(e)
         }
-        finishedTable()
-          .catch(setError);
-        history.go("/")
+      }
+      finishedTable()
+      history.go("/")
+      return () => abortController.abort()
     }
     history.go("/");
   }
-
 
   return (
     <main>
@@ -66,7 +71,7 @@ function Dashboard({ date, setDate }) {
               Reservations for Date: {date}
             </h4>
           </div>
-        <ErrorAlert error={error}/>
+          <ErrorAlert error={error} />
           <button type="button" className="btn btn-primary" onClick={() => setDate(previousDay)}>
             Previous
           </button>
@@ -76,13 +81,13 @@ function Dashboard({ date, setDate }) {
           <button type="button" className="btn btn-primary" onClick={() => setDate(nextDay)}>
             Next
           </button>
-        <CustomerReservations reservations={reservations} date={date} />
-      </div>
-      <div className="col-md-6 col-sm-12">
-        <div className="d-md-flex mb-3">
-          <Table tables={tables} handleTable={handleTable}/>
+          <CustomerReservations reservations={reservations} date={date} />
+        </div>
+        <div className="col-md-6 col-sm-12">
+          <div className="d-md-flex mb-3">
+            <Table tables={tables} handleTable={handleTable} />
           </div>
-      </div>
+        </div>
       </div>
     </main>
   );
