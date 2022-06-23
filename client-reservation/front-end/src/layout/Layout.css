@@ -1,0 +1,25 @@
+html {
+  max-height: 100%;
+}
+.container-fluid {
+  padding: 0;
+}
+.side-bar {
+  background-color: #393a44;
+  min-width: 200px;
+  height: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  html {
+    max-height: 100%;
+  }
+  .container-fluid {
+    display: flex;
+    max-height: 100%;
+  }
+  .side-bar{
+    height: 70em;
+    max-width: 11%;
+  }
+}

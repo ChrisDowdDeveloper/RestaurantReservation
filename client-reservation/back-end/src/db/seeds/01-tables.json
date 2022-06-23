@@ -1,0 +1,30 @@
+[
+  {
+      "table_name": "Bar #1",
+      "status": "open",
+      "capacity": 1,
+      "created_at": "2022-05-31T08:30:32.326Z",
+      "updated_at": "2022-05-31T08:30:32.326Z"
+  },
+  {
+      "table_name": "Bar #2",
+      "status": "open",
+      "capacity": 1,
+      "created_at": "2022-05-31T08:31:32.326Z",
+      "updated_at": "2022-05-31T08:31:32.326Z"
+  },
+  {
+      "table_name": "#1",
+      "status": "open",
+      "capacity": 6,
+      "created_at": "2022-05-31T08:31:32.326Z",
+      "updated_at": "2022-05-31T08:31:32.326Z"
+  },
+  {
+      "table_name": "#2",
+      "status": "open",
+      "capacity": 6,
+      "created_at": "2022-05-31T08:31:32.326Z",
+      "updated_at": "2022-05-31T08:31:32.326Z"
+  }
+]
