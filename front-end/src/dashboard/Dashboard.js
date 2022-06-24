@@ -32,6 +32,8 @@ function Dashboard({ date, setDate }) {
   function loadDashboard() {
     const abortController = new AbortController();
     setError(null);
+    setReservations([]);
+    setTables([])
     try {
       listReservations({ date }, abortController.signal)
         .then(setReservations)
@@ -55,10 +57,9 @@ function Dashboard({ date, setDate }) {
         }
       }
       finishedTable()
-      history.go("/")
       return () => abortController.abort()
     }
-    history.go("/");
+    history.go("/")
   }
 
   return (

@@ -75,7 +75,7 @@ export default function Search() {
                             name="mobile_number"
                             type="text"
                             placeholder="Enter a customer's phone number"
-                            value={number}
+                            value={number || ''} 
                             onChange={handleNumber}
                             required={true}
                         />
