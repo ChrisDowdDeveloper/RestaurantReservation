@@ -133,7 +133,7 @@ function statusBooked(req, res, next) {
 async function byDateOrPhone(req, res, next) {
   const { date, mobile_number } = req.query;
   if (date) {
-    const reservations = await service.list(date);
+    const reservations = await service.listByDate(date);
     if (reservations.length) {
       res.locals.data = reservations;
       return next();
