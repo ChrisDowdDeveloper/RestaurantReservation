@@ -1,5 +1,11 @@
 const knex = require("../db/connection");
 
+function list() {
+    return knex("reservations") 
+        .select("*")
+        .orderBy("reservation_time");
+}
+
 function listByDate(reservationDate) {
     return knex("reservations")
         .select("*")
@@ -54,6 +60,7 @@ function search(mobile_number) {
 }
 
 module.exports = {
+    list,
     listByDate,
     read,
     create,
