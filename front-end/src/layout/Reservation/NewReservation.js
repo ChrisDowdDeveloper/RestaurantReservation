@@ -7,30 +7,29 @@ import FormComponent from "./FormComponent";
 
 //Creates a reservation
 export default function NewReservation() {
-    const [error, setError] = useState(null);
+    const [error, setError] = useState([]);
     const history = useHistory();
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [number, setNumber] = useState(0);
-    const [partySize, setPartySize] = useState("");
-    const [reservationDate, setReservationDate] = useState("");
-    const [reservationTime, setReservationTime] = useState("")
-
-    const reservation = {
-        "first_name": firstName,
-        "last_name": lastName,
-        "mobile_number": number,
-        "people": partySize,
-        "reservation_date": reservationDate,
-        "reservation_time": reservationTime,
+    const initialForm = {
+        first_name: "",
+        last_name: "",
+        mobile_number: "",
+        reservation_date: "",
+        reservation_time: "",
+        people: 1,
     };
 
-    function handleSubmit(event) {
+    const [reservation, setReservation] = useState({ ...initialForm });
+    console.log(error)
+
+    const handleSubmit = (event) => {
+        if (error.length === 0) setError(null);
         event.preventDefault();
-        const abortController = new AbortController()
+        const abortController = new AbortController();
         try {
-            createReservation(reservation, abortController.signal)
-                .then((result) => history.push("/dashboard"))
+            if (error.length === 0) {
+                createReservation(reservation, abortController.signal)
+                    .then(history.push(`/dashboard?date=${reservation.reservation_date}`));
+            }
         } catch (e) {
             setError(e)
         }
@@ -39,17 +38,13 @@ export default function NewReservation() {
 
     return (
         <div>
-            <ErrorAlert error={error} />
+            {error.length > 0 ? <ErrorAlert error={error} /> : null}
             <FormComponent
                 type="New"
                 reservation={reservation}
-                setFirstName={setFirstName}
-                setLastName={setLastName}
-                setNumber={setNumber}
-                setPartySize={setPartySize}
-                setReservationDate={setReservationDate}
-                setReservationTime={setReservationTime}
+                setReservation={setReservation}
                 handleSubmit={handleSubmit}
+                setError={setError}
             />
         </div>
     );
