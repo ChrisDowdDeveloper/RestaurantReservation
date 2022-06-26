@@ -11,27 +11,11 @@ export default function FormComponent(props) {
         setError,
     } = props;
 
-    const validation = () => {
-        let errorsFound = [];
-        let dateToCheck = (`${reservation.reservation_date} ${reservation.reservation_time}`)
-        const date = new Date(reservation.reservation_date);
-        const day = date.getUTCDay();
-        let currentDay = new Date()
-        if (day === 2) errorsFound.push({ message: "Restaurant is closed on Tuesdays." })
-        if (dateToCheck < currentDay) errorsFound.push({ message: "Reservations cannot be made in the past." })
-        let timeToCheck = Number(reservation.reservation_time.replace(":", ""));
-        if (timeToCheck < 1030) errorsFound.push({ message: "Reservations cannot be made before 10:30am." });
-        if (timeToCheck > 2130) errorsFound.push({ message: "Reservations cannot be made after 9:30pm." });
-        if (timeToCheck > 2230) errorsFound.push({ message: "Restaurant is closed at 10:30." });
-        if (errorsFound.length > 0) setError(errorsFound)
-    }
-
-
     const handleReservation = ({ target }) => {
         const value =
             target.type === "number" ? Number(target.value) : target.value;
         setReservation({ ...reservation, [target.name]: value });
-        validation();
+        setError(null);
     }
 
 
