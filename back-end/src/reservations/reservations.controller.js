@@ -144,7 +144,7 @@ async function byDateOrPhone(req, res, next) {
       });
     }
   }
-  if (mobile_number) {
+  if (mobile_number || '') {
     const reservation = await service.find(mobile_number);
     res.locals.data = reservation;
     return next();
