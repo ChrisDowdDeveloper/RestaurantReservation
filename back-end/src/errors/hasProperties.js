@@ -13,7 +13,7 @@ function hasProperties(...properties) {
         } catch (error) {
             next(error);
         }
-    };   
+    };
 }
 
 module.exports = hasProperties;
