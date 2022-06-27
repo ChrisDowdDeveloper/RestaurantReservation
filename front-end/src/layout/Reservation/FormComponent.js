@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { updateReservation, createReservation } from "../../utils/api";
+import ErrorAlert from "../ErrorAlert";
 
 export default function FormComponent(props) {
+    const [error, setError] = useState(null)
     const history = useHistory();
     const {
         type,
         reservation,
         setReservation,
-        setError,
+        onSubmit,
     } = props;
 
     const handleReservation = ({ target: { name, value } }) => {
@@ -22,49 +23,12 @@ export default function FormComponent(props) {
         setError(null);
     }
 
-    async function handleSubmit(event) {
-        const abortController = new AbortController();
-        try {
-            event.preventDefault();
-            if (!checkTuesday(reservation.reservation_date)) {
-                throw new Error('Restaurant is closed on Tuesdays')
-            } else if (!checkTime(reservation.reservation_time)) {
-                throw new Error('A reservation cannot be made before 10:30am or after 9:30pm')
-            } else if (!futureReservation()) {
-                throw new Error("A reservation can only be made on or after today's date.")
-            }
-            if (type === "Edit") {
-                updateReservation(reservation, abortController.signal)
-                    .then(history.push(`/dashboard?date=${reservation.reservation_date}`));
-            } else {
-                createReservation(reservation, abortController.signal)
-                    .then(history.push(`/dashboard?date=${reservation.reservation_date}`))
-            }
-        } catch (err) {
-            setError(err)
-        }
-        return () => abortController.abort();
-    }
-
-    const checkTuesday = (dateInput) => {
-        const dateToCheck = new Date(`${dateInput} 00:00`)
-        return dateToCheck.getDay() !== 2;
-    }
-
-    const checkTime = (timeInput) => {
-        return (timeInput > '10:30' && timeInput < '21:30')
-    }
-
-    const futureReservation = () => {
-        const dateToCheck = new Date(`${reservation.reservation_date} ${reservation.reservation_time} CST`);
-        return Date.now() < dateToCheck.getTime();
-    }
-
     return (
         <div className="card my-3 border-secondary">
+            <ErrorAlert error={error} />
             <h3 className="card-header text-white bg-secondary">{type} Reservation</h3>
             <div className="card-body"></div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={onSubmit}>
                 <div className="col-10 form-group">
                     <label className="form-label" htmlFor="first_name">First name: </label>
                     <input

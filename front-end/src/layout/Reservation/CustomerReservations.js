@@ -1,22 +1,23 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { updateStatus } from "../../utils/api";
 import ErrorAlert from "../ErrorAlert";
 
-export default function CustomerReservations({ reservations, loadDashboard }) {
-    const [error, setError] = useState(null)
+export default function CustomerReservations({ reservations }) {
+    const [error, setError] = useState(null);
+    const history = useHistory();
     //Cancels the reservation
     async function cancelReservation(reservation_id) {
+        const abortController = new AbortController();
         if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
-            const abortController = new AbortController();
             try {
                 await updateStatus(reservation_id, "cancelled", abortController.signal)
-                loadDashboard();
+                history.go(0)
             } catch (e) {
                 setError(e)
             }
-            return () => abortController.abort()
         }
+        return () => abortController.abort()
     }
 
     return (
