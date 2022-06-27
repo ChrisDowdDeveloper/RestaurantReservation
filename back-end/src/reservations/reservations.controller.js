@@ -156,6 +156,7 @@ async function reservationExists(req, res, next) {
   const { reservation_id } = req.params;
   const data = await service.read(reservation_id);
   if (data) {
+    data.reservation_date = data.reservation_date.toISOString().split('T')[0]
     res.locals.reservation = data;
     return next();
   } else {

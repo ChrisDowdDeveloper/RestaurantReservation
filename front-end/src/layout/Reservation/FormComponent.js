@@ -33,12 +33,12 @@ export default function FormComponent(props) {
             } else if (!futureReservation()) {
                 throw new Error("A reservation can only be made on or after today's date.")
             }
-            if (type === "New") {
-                createReservation(reservation, abortController.signal)
+            if (type === "Edit") {
+                updateReservation(reservation, abortController.signal)
                     .then(history.push(`/dashboard?date=${reservation.reservation_date}`));
             } else {
-                updateReservation(reservation, abortController.signal)
-                    .then(history.go("/"))
+                createReservation(reservation, abortController.signal)
+                    .then(history.push(`/dashboard?date=${reservation.reservation_date}`))
             }
         } catch (err) {
             setError(err)
@@ -59,8 +59,6 @@ export default function FormComponent(props) {
         const dateToCheck = new Date(`${reservation.reservation_date} ${reservation.reservation_time} CST`);
         return Date.now() < dateToCheck.getTime();
     }
-
-
 
     return (
         <div className="card my-3 border-secondary">

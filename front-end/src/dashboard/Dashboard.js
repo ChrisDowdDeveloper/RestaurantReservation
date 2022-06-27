@@ -49,7 +49,7 @@ function Dashboard({ date, setDate }) {
     const abortController = new AbortController();
     if (question) {
       try {
-        await deleteTableStatus(table.table_id, table.reservation_id, abortController.signal)
+        deleteTableStatus(table.table_id, table.reservation_id, abortController.signal)
         loadDashboard();
       } catch (e) {
         setError(e)

@@ -25,7 +25,6 @@ export default function EditReservation() {
         return () => ac.abort();
     }, [reservation_id]);
 
-
     return (
         <div>
             <ErrorAlert error={error} />
