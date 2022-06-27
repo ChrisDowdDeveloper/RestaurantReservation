@@ -123,25 +123,22 @@ export async function createTable(tableForm, signal) {
 //Calls the API to update a table status to "occupied"
 export async function seatTable(table_id, reservation_id, signal) {
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
-  return await fetchJson(
-    url,
-    {
-      body: JSON.stringify({ data: { reservation_id } }),
-      headers,
-      method: "PUT",
-      signal,
-    },
-    []
-  );
-}
-
-//Calls the API to update the reservation by the reservation ID
-export async function updateReservation(newFormData, reservation_id, signal) {
-  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({ data: newFormData }),
+    body: JSON.stringify({ data: { reservation_id } }),
+    signal,
+  }
+  return await fetchJson(url, options, {});
+}
+
+//Calls the API to update the reservation by the reservation ID
+export async function updateReservation(reservation, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation.reservation_id}`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: reservation }),
     signal,
   };
   return await fetchJson(url, options, {});
@@ -166,7 +163,13 @@ export async function updateStatus(reservation_id, newStatus, signal) {
 }
 
 //Calls the API to update the table status back to "Free"
-export async function deleteTableStatus(table_id, signal) {
+export async function deleteTableStatus(table_id, reservation_id, signal) {
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
-  return await fetch(url, { headers, method: "DELETE", signal }, []);
+  const options = {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify({ data: reservation_id }),
+    signal,
+  };
+  return await fetch(url, options, {});
 };

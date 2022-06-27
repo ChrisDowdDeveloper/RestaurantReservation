@@ -14,7 +14,7 @@ function create(table) {
     return knex("tables")
         .insert(table)
         .returning("*")
-        .then((createdRecords) => createdRecords[0]);
+        .then((res) => res[0]);
 }
 
 // read a table by table_id - exists for validation purposes only
@@ -26,20 +26,20 @@ function read(table_id) {
 }
 
 // seat a reservation at a table
-function update(updatedTable) {
+function update(table, reservation) {
     return knex("tables")
         .select("*")
-        .where({ table_id: updatedTable.table_id })
-        .update(updatedTable, "*")
-        .then((updatedTables) => updatedTables[0]);
+        .where({ "table_id": table.table_id })
+        .update({ "reservation_id": reservation.reservation_id })
+        .then(() => read(table.table_id))
 }
 
-async function destroy(finishTable) {
+async function destroy(table) {
     return await knex("tables")
-      .where({ table_id: finishTable.table_id })
-      .update(finishTable, "*")
-      .then((updatedTables) => updatedTables[0]);
-  }
+        .where({ "table_id": table.table_id })
+        .update({ "reservation_id": null })
+        .then(() => read(table.table_id));
+}
 
 module.exports = {
     create,

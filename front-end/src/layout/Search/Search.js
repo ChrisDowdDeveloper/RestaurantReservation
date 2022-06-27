@@ -7,22 +7,23 @@ import ErrorAlert from "../ErrorAlert";
 export default function Search() {
 
     const history = useHistory();
-    const [number, setNumber] = useState();
-    const [foundReservations, setFoundReservations] = useState();
+    const [number, setNumber] = useState("");
+    const [foundReservations, setFoundReservations] = useState([]);
     const [error, setError] = useState(null);
+    const [submitClicked, setSubmitClicked] = useState(false);
 
     const handleNumber = (event) => setNumber(event.target.value);
 
     const handleSubmit = (event) => {
-        event.preventDefault();
+        setSubmitClicked(true);
         try {
+            event.preventDefault();
             searchReservation(number)
-                .then(setFoundReservations)
+                .then(setFoundReservations);
         } catch (e) {
             setError(e)
         }
     }
-
     async function cancelReservation(reservation_id) {
         if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
             const abortController = new AbortController();
@@ -75,7 +76,7 @@ export default function Search() {
                             name="mobile_number"
                             type="text"
                             placeholder="Enter a customer's phone number"
-                            value={number || ''} 
+                            value={number || ''}
                             onChange={handleNumber}
                             required={true}
                         />
@@ -85,7 +86,8 @@ export default function Search() {
                         </div>
                     </div>
                 </form>
-            </div>  {foundReservations ? <Display /> : ""}
+            </div>
+            {submitClicked && foundReservations.length === 0 ? <div className="alert alert-danger m-2">No reservations found</div> : <Display />}
         </div>
     )
 }

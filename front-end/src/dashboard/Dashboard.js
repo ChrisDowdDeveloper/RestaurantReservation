@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
 import { listReservations, listTables, deleteTableStatus } from "../utils/api";
 import CustomerReservations from "../layout/Reservation/CustomerReservations";
 import Table from "../layout/Tables/Table";
@@ -24,7 +23,6 @@ function Dashboard({ date, setDate }) {
   const currentDay = today()
   const previousDay = previous(date)
   const nextDay = next(date)
-  const history = useHistory();
 
   useEffect(loadDashboard, [date]);
 
@@ -33,7 +31,7 @@ function Dashboard({ date, setDate }) {
     const abortController = new AbortController();
     setError(null);
     setReservations([]);
-    setTables([])
+    setTables([]);
     try {
       listReservations({ date }, abortController.signal)
         .then(setReservations)
@@ -46,21 +44,19 @@ function Dashboard({ date, setDate }) {
   }
 
   //Handles the request to finish a reservation and makes the table status to "Open" once more.
-  async function handleTable(table_id) {
-    if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")) {
-      const abortController = new AbortController();
-      async function finishedTable() {
-        try {
-          await deleteTableStatus(table_id, abortController.signal);
-        } catch (e) {
-          setError(e)
-        }
-      }
-      finishedTable()
-      return () => abortController.abort()
-    }
-    history.go("/")
-  }
+  const handleTable = async (table) => {
+    let question = window.confirm("Is this table ready to seat new guests? This cannot be undone.")
+    const abortController = new AbortController();
+    if (question) {
+      try {
+        await deleteTableStatus(table.table_id, table.reservation_id, abortController.signal)
+        loadDashboard();
+      } catch (e) {
+        setError(e)
+      };
+    };
+    return () => abortController.abort();
+  };
 
   return (
     <main>
@@ -82,7 +78,7 @@ function Dashboard({ date, setDate }) {
           <button type="button" className="btn btn-primary" onClick={() => setDate(nextDay)}>
             Next
           </button>
-          <CustomerReservations reservations={reservations} date={date} />
+          <CustomerReservations reservations={reservations} date={date} loadDashboard={loadDashboard} />
         </div>
         <div className="col-md-6 col-sm-12">
           <div className="d-md-flex mb-3">

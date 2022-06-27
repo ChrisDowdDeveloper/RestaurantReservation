@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { updateReservation, createReservation } from "../../utils/api";
 
 export default function FormComponent(props) {
     const history = useHistory();
@@ -7,16 +8,58 @@ export default function FormComponent(props) {
         type,
         reservation,
         setReservation,
-        handleSubmit,
         setError,
     } = props;
 
-    const handleReservation = ({ target }) => {
-        const value =
-            target.type === "number" ? Number(target.value) : target.value;
-        setReservation({ ...reservation, [target.name]: value });
+    const handleReservation = ({ target: { name, value } }) => {
+        if (name === "people") {
+            value = Number(value);
+        }
+        setReservation((prevRes) => ({
+            ...prevRes,
+            [name]: value,
+        }));
         setError(null);
     }
+
+    async function handleSubmit(event) {
+        const abortController = new AbortController();
+        try {
+            event.preventDefault();
+            if (!checkTuesday(reservation.reservation_date)) {
+                throw new Error('Restaurant is closed on Tuesdays')
+            } else if (!checkTime(reservation.reservation_time)) {
+                throw new Error('A reservation cannot be made before 10:30am or after 9:30pm')
+            } else if (!futureReservation()) {
+                throw new Error("A reservation can only be made on or after today's date.")
+            }
+            if (type === "New") {
+                createReservation(reservation, abortController.signal)
+                    .then(history.push(`/dashboard?date=${reservation.reservation_date}`));
+            } else {
+                updateReservation(reservation, abortController.signal)
+                    .then(history.go("/"))
+            }
+        } catch (err) {
+            setError(err)
+        }
+        return () => abortController.abort();
+    }
+
+    const checkTuesday = (dateInput) => {
+        const dateToCheck = new Date(`${dateInput} 00:00`)
+        return dateToCheck.getDay() !== 2;
+    }
+
+    const checkTime = (timeInput) => {
+        return (timeInput > '10:30' && timeInput < '21:30')
+    }
+
+    const futureReservation = () => {
+        const dateToCheck = new Date(`${reservation.reservation_date} ${reservation.reservation_time} CST`);
+        return Date.now() < dateToCheck.getTime();
+    }
+
 
 
     return (

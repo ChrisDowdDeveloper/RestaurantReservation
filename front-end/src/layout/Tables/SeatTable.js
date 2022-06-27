@@ -9,7 +9,7 @@ export default function SeatTable() {
   const [error, setError] = useState(null);
   const { reservation_id } = useParams();
   const [tables, setTables] = useState([]);
-  const [tableId, setTableId] = useState(0);
+  let table_id = 0;
 
   //Loads table data
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function SeatTable() {
     event.preventDefault();
     const abortController = new AbortController();
     try {
-      seatTable(tableId, reservation_id, abortController.signal)
+      seatTable(table_id, reservation_id, abortController.signal)
         .then(() => history.push("/"))
     } catch (e) {
       setError(e)
@@ -39,13 +39,7 @@ export default function SeatTable() {
   };
 
   const handleTable = event => {
-    event.preventDefault();
-    const abortController = new AbortController();
-    try {
-      setTableId(event.target.value, abortController.signal)
-    } catch (e) {
-      setError(e)
-    }
+    table_id = event.target.value
   }
 
   return (
