@@ -60,22 +60,6 @@ function peopleIsNumber(req, res, next) {
   })
 }
 
-// Validation Middleware--checks that the reservation date & reservation time have not passed
-function notInPast(req, res, next) {
-  const { reservation_date, reservation_time } = req.body.data;
-  const reservation = new Date(`${reservation_date} PDT`).setHours(reservation_time.substring(0, 2), reservation_time.substring(3));
-  const now = Date.now();
-  if (reservation > now) {
-    return next();
-  } else {
-    return next({
-      status: 400,
-      message: "Reservation must be in the future.",
-    });
-  }
-}
-
-
 // Validation Middleware--checks that the reservation date is not on a Tuesday
 function notTuesday(req, res, next) {
   const { reservation_date } = req.body.data;
@@ -91,6 +75,23 @@ function notTuesday(req, res, next) {
   }
 }
 
+
+// Validation Middleware--checks that the reservation date & reservation time have not passed
+function notInPast(req, res, next) {
+  const { reservation_date, reservation_time } = req.body.data;
+  let current = Date.now();
+  let reservationDate = new Date(`${reservation_date} ${reservation_time}`);
+  let newReservation = reservationDate.valueOf();
+
+  if (isNaN(Date.parse(reservation_date))) {
+    return next();
+  } else {
+    return next({
+      status: 400,
+      message: "Reservation must be in the future.",
+    });
+  }
+}
 
 // Validation Middleware--checks that the reservation time is during hours of operation
 function whenOpen(req, res, next) {
@@ -211,6 +212,8 @@ async function create(req, res) {
 
 // reads a reservation
 function read(req, res) {
+  console.log(req + " read function")
+  console.log(res + " response")
   const { reservation } = res.locals;
   res.json({ data: reservation });
 }
