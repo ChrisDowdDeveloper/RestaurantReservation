@@ -1,84 +1,55 @@
 import React, { useState } from "react";
+import TableForm from "./TableForm";
 import { useHistory } from "react-router-dom";
 import { createTable } from "../../utils/api";
 import ErrorAlert from "../ErrorAlert";
 
-//Allows user to create a Table
-export default function CreateTable() {
+function CreateTable() {
+    const [newTable, setNewTable] = useState({
+        table_name: "",
+        capacity: "",
+    });
+    const history = useHistory();
     const [error, setError] = useState(null);
 
-    const history = useHistory();
+    //Handles the changes made to each input
+    const handleChange = (event) => {
+        event.preventDefault();
+        setNewTable({ ...newTable, [event.target.name]: event.target.value });
+    };
 
-    const tableForm = {
-        "table_name": "",
-        "capacity": 1,
-    }
-
-    const [table, setTable] = useState({ ...tableForm })
-
-    const handleTable = ({ target }) => {
-        const value =
-            target.type === "number" ? Number(target.value) : target.value;
-        setTable({ ...table, [target.name]: value });
-        setError(null);
-    }
-
-    const handleSubmit = (event) => {
+    //Handles the submit request to create the table
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const abortController = new AbortController();
         try {
-            if (table.table_name.length < 2) {
-                throw new Error('Table name cannot be less than 2 letters')
-            } else if (table.capacity < 1) {
-                throw new Error('Table must be able to seat at least 1 guest')
-            }
-            createTable(table, abortController.signal)
-                .then(() => history.push("/"))
+            await createTable(newTable, abortController.signal);
+            history.push("/dashboard");
         } catch (err) {
-            setError(err)
+            setError(err);
         }
         return () => abortController.abort();
-    }
+    };
+
+    //Handles the cancel button that allows the user to go back to the previous screen
+    const handleCancel = () => {
+        history.goBack();
+    };
 
     return (
-        <div className="card my-3 border-secondary">
-            <ErrorAlert error={error} />
-            <h3 className="card-header text-white bg-secondary">Create Table</h3>
-            <div className="card-body">
-                <form onSubmit={handleSubmit}>
-                    <div className="col-10 form-group">
-                        <label className="form-label" htmlFor="first_name">Table Name: </label>
-                        <input
-                            className="form-control"
-                            name="table_name"
-                            onChange={handleTable}
-                            required
-                        />
-                        <label className="form-label" htmlFor="last_name">Table Capacity:</label>
-                        <input
-                            className="form-control"
-                            name="capacity"
-                            type="number"
-                            required
-                            onChange={handleTable}
-                        />
-                        <br />
-                        <button
-                            type="button"
-                            className="btn btn-secondary"
-                            onClick={() => history.goBack()}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="btn btn-primary"
-                        >
-                            Submit
-                        </button>
-                    </div>
-                </form>
+        <div>
+            <h2 className="card-header text-white bg-secondary">Create New Table</h2>
+            <div className="card my-3 border-secondary">
+                <ErrorAlert error={error} />
+                <TableForm
+                    handleChange={handleChange}
+                    newTable={newTable}
+                    handleSubmit={handleSubmit}
+                    handleCancel={handleCancel}
+                />
             </div>
         </div>
-    )
+    );
 }
+
+export default CreateTable;

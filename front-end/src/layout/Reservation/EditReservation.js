@@ -1,67 +1,70 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { readReservation, updateReservation } from "../../utils/api";
-import ErrorAlert from "../ErrorAlert";
+import { useParams, useHistory } from "react-router-dom"
 import FormComponent from "./FormComponent";
-import ReservationValidation from "./ReservationValidation";
+import { updateReservation, listById } from "../../utils/api";
+import ErrorAlert from "../ErrorAlert";
 
-export default function EditReservation() {
+
+
+function EditReservation() {
+    const initialForm = {
+        first_name: "",
+        last_name: "",
+        mobile_number: "",
+        reservation_date: "",
+        reservation_time: "",
+        people: ""
+    }
+    const [form, setForm] = useState(initialForm)
     const { reservation_id } = useParams();
-    const [error, setError] = useState(null);
-    const [reservation, setReservation] = useState({});
-    const history = useHistory();
+    const [formError, setFormError] = useState(null);
+    const history = useHistory()
 
-    //Loads the specific reservation and details
-    useEffect(() => {
-        const ac = new AbortController();
-        async function loadReservation() {
-            try {
-                await readReservation(reservation_id, ac.signal)
-                    .then(setReservation)
-            } catch (e) {
-                setError(e)
-            }
-        }
-        loadReservation()
-        return () => ac.abort();
-    }, [reservation_id]);
+    useEffect(loadReservation, [reservation_id])
 
-    const onSubmit = (event) => {
-        console.log("Button click ")
+    //Loads the reservation that is being updated
+    function loadReservation() {
+        const abortController = new AbortController();
+        setFormError(null)
+        listById(reservation_id, abortController.signal)
+            .then(setForm)
+            .catch(setFormError);
+        return () => abortController.abort()
+    }
+
+    //Handles the changes made to reservation
+    const handleChange = (event) => {
         event.preventDefault();
-        const errors = ReservationValidation(reservation);
-        console.log("errors " + errors)
-        if (errors.length) {
-            console.log("there are errors")
-            setError(errors)
-        } else {
-            console.log("before try in else")
-            try {
-                console.log("before call")
-                updateReservation(reservation)
-                    .then(console.log("after call"))
-                    .then(() => {
-                        history.push(`/dashboard?date=${reservation.reservation_date}`)
-                    })
-                console.log("after call and push to dash")
-            } catch (err) {
-                console.log("In catch, call to API fail")
-                setError(err)
-                console.log("err from API" + err)
-            }
+        setForm({ ...form, [event.target.name]: event.target.value })
+    }
+
+    //Handles the submit request for the changes that were made
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const abortController = new AbortController();
+        try {
+            const reservation = await updateReservation(form, reservation_id, abortController.signal);
+            const updatedDate = reservation.reservation_date.match(/\d{4}-\d{2}-\d{2}/)[0];
+            history.push(`/dashboard?date=${updatedDate}`);
+        } catch (err) {
+            setFormError(err)
         }
-        console.log("end of submit")
+        return () => abortController.abort()
     }
 
     return (
         <div>
-            <ErrorAlert error={error} />
-            <FormComponent
-                type="Edit"
-                reservation={reservation}
-                setReservation={setReservation}
-                onSubmit={onSubmit}
-            />
+            <h2 className="card-header text-white bg-secondary">Edit Reservation</h2>
+            <div className="card my-3 border-secondary">
+                <ErrorAlert error={formError} />
+                <FormComponent
+                    handleChange={handleChange}
+                    handleSubmit={handleSubmit}
+                    form={form}
+                />
+            </div>
         </div>
-    );
+    )
 }
+
+export default EditReservation;

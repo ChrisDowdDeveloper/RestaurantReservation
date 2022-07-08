@@ -1,17 +1,14 @@
 import React, { useState } from "react";
-
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
-import NewReservation from "./Reservation/NewReservation";
-import EditReservation from "./Reservation/EditReservation";
-import CreateTable from "./Tables/CreateTable";
-import SeatTable from "./Tables/SeatTable";
-import Search from "./Search/Search";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
-import useQuery from '../utils/useQuery'
-
-
+import NewReservation from "./Reservation/NewReservation";
+import useQuery from "../utils/useQuery";
+import EditReservation from "./Reservation/EditReservation";
+import Search from "./Search/Search";
+import CreateTable from "./Tables/CreateTable";
+import SeatTable from "./Tables/SeatTable";
 
 /**
  * Defines all the routes for the application.
@@ -21,9 +18,8 @@ import useQuery from '../utils/useQuery'
  * @returns {JSX.Element}
  */
 function Routes() {
-  const query = useQuery()
+  const query = useQuery();
   const [date, setDate] = useState(query.get('date') || today())
-
   return (
     <Switch>
       <Route exact={true} path="/">

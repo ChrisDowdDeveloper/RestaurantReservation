@@ -1,44 +1,74 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { updateStatus } from "../../utils/api";
-import ErrorAlert from "../ErrorAlert";
+import { Link } from "react-router-dom";
 
-export default function CustomerReservations({ reservations }) {
-    const [error, setError] = useState(null);
-    const history = useHistory();
-    //Cancels the reservation
-    async function cancelReservation(reservation_id) {
-        const abortController = new AbortController();
-        if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
-            try {
-                await updateStatus(reservation_id, "cancelled", abortController.signal)
-                history.go(0)
-            } catch (e) {
-                setError(e)
-            }
-        }
-        return () => abortController.abort()
-    }
+function CustomerReservations({ reservations, handleCancel }) {
+    /*
+        Lists the reservation and adds an extra measure to make sure 
+        that reservations with the status of "finished" or "cancelled" aren't included
+    */
+    const list = reservations.map((reservation) => {
+        if (reservation.status === "finished" || reservation.status === "cancelled")
+            return null;
+        return (
+            <div
+                className="card-body"
+                key={reservation.reservation_id}
+            >
+                <h3>{reservation.reservation_date}</h3>
+                <h4 className="card-title">
+                    Name: {reservation.last_name}, {reservation.first_name}
+                </h4>
+                <p className="card-text">Time: {reservation.reservation_time}</p>
 
-    return (
-        <div className="card mt-1">
-            <ErrorAlert error={error} />
-            {reservations.map(reservation => (
-                <div className="card-body" key={reservation.reservation_id}>
-                    <h4 className="card-title">
-                        {reservation.first_name} {reservation.last_name}
-                    </h4>
-                    <h6 className="card-text">Phone Number: </h6><p>{reservation.mobile_number}</p>
-                    <h6 className="card-text">Date of Reservation: </h6><p>{reservation.reservation_date}</p>
-                    <h6 className="card-text">Time of Reservation: </h6><p>{reservation.reservation_time}</p>
-                    <h6 className="card-text">Party Size: </h6><p>{reservation.people}</p>
-                    <h6 className="card-text">Reservation Status: </h6> <p data-reservation-id-status={reservation.reservation_id}>{reservation.status}</p>
-                    <br />
-                    {reservation.status === "booked" ? <button type="button" className="btn btn-success btn-md"><Link style={{ color: 'white' }} to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link></button> : null}
-                    {reservation.status === "booked" ? <button type="button" className="btn btn-warning btn-md" data-reservation-id-cancel={reservation.reservation_id}><Link style={{ color: 'white' }} to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link></button> : null}
-                    <button type="button" className="btn btn-danger btn-md" data-reservation-id-cancel={reservation.reservation_id} onClick={() => cancelReservation(reservation.reservation_id)}>Cancel Reservation</button>
+                <p className="card-text">Phone Number: {reservation.mobile_number}</p>
+                <p className="card-text">Size: {reservation.people}</p>
+                <p data-reservation-id-status={reservation.reservation_id} className="card-text">
+                    Status: {reservation.status}
+                </p>
+                <div>
+                    {reservation.status === "booked" && (
+                        <Link
+                            to={`/reservations/${reservation.reservation_id}/seat`}
+                            className="btn btn-success res-card-link"
+
+                        >
+                            Seat
+                        </Link>
+                    )}
+                    {"   "}
+                    {reservation.status === "booked" && (
+                        <Link
+                            to={`/reservations/${reservation.reservation_id}/edit`}
+                            className="btn btn-success res-card-link"
+                        >
+                            Edit
+                        </Link>
+                    )}
+                    {"   "}
+                    <button
+                        data-reservation-id-cancel={reservation.reservation_id}
+                        onClick={() => handleCancel(reservation.reservation_id)}
+                        className="btn btn-danger res-card-link"
+                    >
+                        Cancel
+                    </button>
                 </div>
-            ))}
+            </div>
+        );
+    });
+
+    if (reservations.length < 1) {
+        return (
+            <div>
+                <p style={{ textAlign: "center" }}>No reservations found</p>
+            </div>
+        );
+    }
+    return (
+        <div className="row res-card-container">
+            {list}
+            <br />
         </div>
-    )
+    );
 }
+
+export default CustomerReservations;
