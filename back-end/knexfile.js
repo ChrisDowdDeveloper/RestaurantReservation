@@ -12,7 +12,7 @@ const {
 module.exports = {
   development: {
     client: "postgresql",
-    pool: { min: 1, max: 5 },
+    pool: { min: 2, max: 10 },
     connection: {
       connectionString: DATABASE_URL_DEVELOPMENT,
       ssl: { rejectUnauthorized: false },
@@ -27,7 +27,7 @@ module.exports = {
   },
   test: {
     client: "postgresql",
-    pool: { min: 1, max: 5 },
+    pool: { min: 2, max: 10 },
     connection: {
       connectionString: DATABASE_URL_TEST,
       ssl: { rejectUnauthorized: false },
@@ -42,7 +42,7 @@ module.exports = {
   },
   preview: {
     client: "postgresql",
-    pool: { min: 1, max: 5 },
+    pool: { min: 2, max: 10 },
     connection: {
       connectionString: DATABASE_URL_PREVIEW,
       ssl: { rejectUnauthorized: false },
@@ -57,7 +57,7 @@ module.exports = {
   },
   production: {
     client: "postgresql",
-    pool: { min: 1, max: 5 },
+    pool: { min: 2, max: 10 },
     connection: {
       connectionString: DATABASE_URL,
       ssl: { rejectUnauthorized: false },
