@@ -1,9 +1,3 @@
-/**
- * Knex configuration file.
- *
- * You will not need to make changes to this file.
- */
-
 require('dotenv').config();
 const path = require("path");
 
@@ -19,7 +13,10 @@ module.exports = {
   development: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL_DEVELOPMENT,
+    connection: {
+      connectionString: DATABASE_URL_DEVELOPMENT,
+      ssl: { rejectUnauthorized: false },
+    },
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
@@ -31,7 +28,10 @@ module.exports = {
   test: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL_TEST,
+    connection: {
+      connectionString: DATABASE_URL_TEST,
+      ssl: { rejectUnauthorized: false },
+    },
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
@@ -43,7 +43,10 @@ module.exports = {
   preview: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL_PREVIEW,
+    connection: {
+      connectionString: DATABASE_URL_PREVIEW,
+      ssl: { rejectUnauthorized: false },
+    },
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
@@ -55,7 +58,10 @@ module.exports = {
   production: {
     client: "postgresql",
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL,
+    connection: {
+      connectionString: DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    },
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },

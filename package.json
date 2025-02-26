@@ -50,6 +50,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "knex": "^2.1.0",
-    "pg": "^8.7.3"
+    "pg": "^8.7.3",
+    "starter-restaurant-reservation": "file:"
   }
 }
